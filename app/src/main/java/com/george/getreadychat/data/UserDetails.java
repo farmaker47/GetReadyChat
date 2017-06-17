@@ -5,4 +5,7 @@ public class UserDetails {
 
     public static String secondUser = "";
     static String chatWith = "";
+
+    public static String readed = "true";
+    public static String notReaded = "false";
 }

@@ -1,18 +1,10 @@
 package com.george.getreadychat;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -28,7 +20,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.george.getreadychat.data.UserDetails;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -72,7 +63,6 @@ public class UserToUserMessage extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotosStorageReference;
 
-    private String isReaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +71,6 @@ public class UserToUserMessage extends AppCompatActivity {
 
 
         /*Toast.makeText(this,"Second User= " + UserDetails.secondUser,Toast.LENGTH_LONG).show();*/
-
-        isReaded = "false";
 
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -150,12 +138,12 @@ public class UserToUserMessage extends AppCompatActivity {
             public void onClick(View view) {
 
                 //Creating a message
-                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(),isReaded);
+                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReference.child(UserDetails.secondUser).push().setValue(userMessage);
 
 
-                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(),isReaded);
+                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReferenceSecondName.child(UserDetails.username).push().setValue(userMessage2);
 
@@ -191,10 +179,10 @@ public class UserToUserMessage extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(),isReaded);
+                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed);
                     mMessagesDatabaseReference.child(UserDetails.secondUser).push().setValue(userMessage);
 
-                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(),isReaded);
+                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded);
                     //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                     mMessagesDatabaseReferenceSecondName.child(UserDetails.username).push().setValue(userMessage2);
 
@@ -211,11 +199,17 @@ public class UserToUserMessage extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                     UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
+                    /*userMessage.setIsReaded("true");*/
                     mMessageAdapter.add(userMessage);
 
+
                     String datasnapshoti = dataSnapshot.getKey();
+                    mMessagesDatabaseReference.child(UserDetails.secondUser).child(datasnapshoti).child("isReaded").setValue("true");
+
                     String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.username).getKey();
-                    Log.e("datasnapsot", datasnapshoti + "----"+ datasnapshotOfLastMessage);
+                    Log.e("datasnapsot", datasnapshoti + "----" + datasnapshotOfLastMessage);
+
+                    mMessageAdapter.notifyDataSetChanged();
                     ////
                     /*friendlyMessage.setIsReaded(true);*/
 
@@ -251,6 +245,7 @@ public class UserToUserMessage extends AppCompatActivity {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    mMessageAdapter.notifyDataSetChanged();
 
                 }
 
@@ -275,6 +270,37 @@ public class UserToUserMessage extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /*mMessagesDatabaseReference2.child(strPersonal).child(str4444).child("-Kmk26FldvLoZoXv2-W5").child("isReaded").setValue("true");*/
+    }
+
+    @Override
+    protected void onPause() {
+
+        mMessagesDatabaseReference.child(UserDetails.secondUser).removeEventListener(mChildEventListener);
+        mChildEventListener = null;
+
+        super.onPause();
+
+    }
+
+
+
+    @Override
+    protected void onStop() {
+
+        if (mChildEventListener != null) {
+            mMessagesDatabaseReference.child(UserDetails.secondUser).removeEventListener(mChildEventListener);
+            mChildEventListener = null;
+        }
+        super.onStop();
+
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -290,7 +316,7 @@ public class UserToUserMessage extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.action_totalmessages:
-                Intent intentToTotalMessages = new Intent(UserToUserMessage.this,TotalMessages.class);
+                Intent intentToTotalMessages = new Intent(UserToUserMessage.this, TotalMessages.class);
                 startActivity(intentToTotalMessages);
                 return true;
             default:

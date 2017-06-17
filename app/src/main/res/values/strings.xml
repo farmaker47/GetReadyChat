@@ -8,4 +8,5 @@
     <string name="back_totalmessages">Total Messages</string>
     <string name="privateMessage">Private message:</string>
     <string name="totalMessages">Total Messages:</string>
+    <string name="readed">Seen</string>
 </resources>

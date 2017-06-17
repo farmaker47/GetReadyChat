@@ -64,17 +64,16 @@ public class UserMessageAdapter extends ArrayAdapter<UserMessage> {
 
         }else{
             authorTextView.setText(message.getName());
+        }
+
+        if (!message.getName().equals(UserDetails.username)) {
             readedTextView.setVisibility(View.INVISIBLE);
         }
 
-        /*if (!message.getName().equals(strUsername)) {
-            readedTextView.setVisibility(View.INVISIBLE);
-        }*/
-
         if (message.getIsReaded().equals( "false")) {
-            readedTextView.setText("Delivered");
+            readedTextView.setText("");
         } else {
-            readedTextView.setText("Readed");
+            readedTextView.setText(R.string.readed);
         }
 
 
