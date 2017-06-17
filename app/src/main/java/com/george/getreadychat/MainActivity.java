@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-
         //iniializing the auth
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -73,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
                     onSignedInInitialize(user.getDisplayName());
 
                 } else {
+
                     onSignedOutCleanup();
+
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
@@ -85,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
         mMessageGeorge = (Button)findViewById(R.id.messageGeorgeButton);
         mMessageMaria = (Button)findViewById(R.id.messageMariaButton);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,7 +102,9 @@ public class MainActivity extends AppCompatActivity {
         mMessageGeorge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 UserDetails.secondUser = "george soloupis";
+
                 Intent intentToUserMessage = new Intent(MainActivity.this,UserToUserMessage.class);
                 startActivity(intentToUserMessage);
 
@@ -112,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
         mMessageMaria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 UserDetails.secondUser = "Maria Vakalopoulou";
+
                 Intent intentToUserMessage = new Intent(MainActivity.this,UserToUserMessage.class);
                 startActivity(intentToUserMessage);
             }
@@ -148,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onSignedInInitialize(String username) {
         mUsername = username;
+
         UserDetails.username= username;
         Log.e("usernameInDetails",UserDetails.username);
 

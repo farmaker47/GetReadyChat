@@ -2,5 +2,7 @@
     <string name="app_name">GetReadyChat</string>
     <string name="action_settings">All Messages</string>
     <string name="sign_out">Sign Out!</string>
+    <string name="send_button_label">Send</string>
+    <string name="uploading_image">Beggining uploading Image</string>
 
 </resources>
