@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "411557943552",
+    "firebase_url": "https://getreadychat-da926.firebaseio.com",
+    "project_id": "getreadychat-da926",
+    "storage_bucket": "getreadychat-da926.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411557943552:android:bb844138ca411536",
+        "android_client_info": {
+          "package_name": "com.george.getreadychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411557943552-omvea6vseo6ib4fha8pv602a94p565j9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.george.getreadychat",
+            "certificate_hash": "12bb8c22b15a835cc1bc0d44c95d803b4358ce28"
+          }
+        },
+        {
+          "client_id": "411557943552-hsi2t9k8p6pnr5128kf3k189pcfjriv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxTYvu1BTjZmVB4SyY65tDrq61Dja05a4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411557943552-hsi2t9k8p6pnr5128kf3k189pcfjriv4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
