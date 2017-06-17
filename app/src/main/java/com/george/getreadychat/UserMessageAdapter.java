@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.george.getreadychat.data.UserDetails;
 
 import java.util.List;
 
@@ -54,23 +55,23 @@ public class UserMessageAdapter extends ArrayAdapter<UserMessage> {
             photoImageView.setVisibility(View.GONE);
             messageTextView.setText(message.getText());
         }
-        authorTextView.setText(message.getName());
+
         timeTextView.setText(message.getTime());
         /*nameToNameTextView.setText(message.getNameToName());*/
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String strUsername = sharedPref.getString("myUsername", null);
-        Log.e("CONTEXT OF ADAPTER", strUsername);
+        if(message.getName().equals(UserDetails.username)){
+            authorTextView.setText(R.string.stringMyName);
 
-        String getName = message.getName();
-        Log.e("MESSAGE__HAS__NAME?", getName);
-
-
-        if (!message.getName().equals(strUsername)) {
+        }else{
+            authorTextView.setText(message.getName());
             readedTextView.setVisibility(View.INVISIBLE);
         }
 
-        if (message.getIsReaded() == false) {
+        /*if (!message.getName().equals(strUsername)) {
+            readedTextView.setVisibility(View.INVISIBLE);
+        }*/
+
+        if (message.getIsReaded().equals( "false")) {
             readedTextView.setText("Delivered");
         } else {
             readedTextView.setText("Readed");

@@ -10,11 +10,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -24,6 +28,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.george.getreadychat.data.UserDetails;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -73,6 +78,7 @@ public class UserToUserMessage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_to_user_message);
+
 
         /*Toast.makeText(this,"Second User= " + UserDetails.secondUser,Toast.LENGTH_LONG).show();*/
 
@@ -267,6 +273,29 @@ public class UserToUserMessage extends AppCompatActivity {
             mMessagesDatabaseReference.child(UserDetails.secondUser).addChildEventListener(mChildEventListener);
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_total_messages, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+
+            case R.id.action_totalmessages:
+                Intent intentToTotalMessages = new Intent(UserToUserMessage.this,TotalMessages.class);
+                startActivity(intentToTotalMessages);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private String getTheDateTime() {
