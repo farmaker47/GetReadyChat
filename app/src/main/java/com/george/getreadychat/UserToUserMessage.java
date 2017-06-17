@@ -156,7 +156,7 @@ public class UserToUserMessage extends AppCompatActivity {
             }
         });
 
-        attachDatabaseReadListener();
+        /*attachDatabaseReadListener();*/
     }
 
     @Override
@@ -270,6 +270,11 @@ public class UserToUserMessage extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        attachDatabaseReadListener();
+        super.onStart();
+    }
 
     @Override
     protected void onResume() {
