@@ -57,6 +57,7 @@ public class UserToUserMessage extends AppCompatActivity {
     private DatabaseReference mMessagesDatabaseReferenceSecondName;
 
     //Child event listener to understand that has new messages
+    private ChildEventListener mDeliveryChildEventListener;
     private ChildEventListener mChildEventListener;
 
     //instance of firebase storage
@@ -191,16 +192,16 @@ public class UserToUserMessage extends AppCompatActivity {
         }
     }
 
-    private void attachDatabaseReadListener() {
-        if (mChildEventListener == null) {
+    private void attachDatabaseReadListenerDeliveryStatus() {
+        if (mDeliveryChildEventListener == null) {
             // Child event listener
-            mChildEventListener = new ChildEventListener() {
+            mDeliveryChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    /*userMessage.setIsReaded("true");*/
-                    mMessageAdapter.add(userMessage);
+                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
+                    userMessage.setIsReaded("true");
+                    mMessageAdapter.add(userMessage);*/
 
 
                     String datasnapshoti = dataSnapshot.getKey();
@@ -265,14 +266,100 @@ public class UserToUserMessage extends AppCompatActivity {
                 }
             };
 
-            mMessagesDatabaseReference.child(UserDetails.secondUser).addChildEventListener(mChildEventListener);
+            mMessagesDatabaseReference.child(UserDetails.secondUser).addChildEventListener(mDeliveryChildEventListener);
         }
 
     }
 
+    private void attachDatabaseReadListenertoListView() {
+        if (mChildEventListener == null) {
+            // Child event listener
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                    UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
+                    /*userMessage.setIsReaded("true");*/
+                    mMessageAdapter.add(userMessage);
+                    mMessageAdapter.notifyDataSetChanged();
+
+
+                    String datasnapshoti = dataSnapshot.getKey();
+                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.username).getKey();
+                    Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
+
+
+                    ////
+                    /*friendlyMessage.setIsReaded(true);*/
+
+                    /*if (!userMessage.getName().equals(UserDetails.username) *//*&& valueOfRead.equals("true"))*//* ){
+
+                        int notifyID = 1;
+
+                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(UserToUserMessage.this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle("Message from:\n " + UserDetails.secondUser)
+                                .setContentText(userMessage.getText())
+                                .setOnlyAlertOnce(true)
+                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                        mBuilder.setAutoCancel(true);
+                        mBuilder.setLocalOnly(false);
+
+                        Intent resultIntent = new Intent(UserToUserMessage.this, UserToUserMessage.class);
+
+
+                        resultIntent.setAction("android.intent.action.MAIN");
+                        resultIntent.addCategory("android.intent.category.LAUNCHER");
+
+                        PendingIntent resultPendingIntent = PendingIntent.getActivity(UserToUserMessage.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        //building the notification
+                        mBuilder.setContentIntent(resultPendingIntent);
+
+                        mNotificationManager.notify(notifyID, mBuilder.build());
+                    }*/
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    mMessageAdapter.clear();
+
+                    mMessageAdapter.notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+
+            mMessagesDatabaseReferenceSecondName.child(UserDetails.username).addChildEventListener(mChildEventListener);
+        }
+    }
+
     @Override
     protected void onStart() {
-        attachDatabaseReadListener();
+
+        //to read messages for discovering/refreshing the delivery status
+        attachDatabaseReadListenerDeliveryStatus();
+
+        //for loading messages to the listview
+        attachDatabaseReadListenertoListView();
+
         super.onStart();
     }
 
@@ -285,8 +372,10 @@ public class UserToUserMessage extends AppCompatActivity {
     @Override
     protected void onPause() {
 
-        mMessagesDatabaseReference.child(UserDetails.secondUser).removeEventListener(mChildEventListener);
+        mMessagesDatabaseReference.child(UserDetails.secondUser).removeEventListener(mDeliveryChildEventListener);
+        mMessagesDatabaseReferenceSecondName.child(UserDetails.username).removeEventListener(mChildEventListener);
         mChildEventListener = null;
+        mDeliveryChildEventListener = null;
 
         super.onPause();
 
@@ -298,8 +387,10 @@ public class UserToUserMessage extends AppCompatActivity {
     protected void onStop() {
 
         if (mChildEventListener != null) {
-            mMessagesDatabaseReference.child(UserDetails.secondUser).removeEventListener(mChildEventListener);
+            mMessagesDatabaseReference.child(UserDetails.secondUser).removeEventListener(mDeliveryChildEventListener);
+            mMessagesDatabaseReferenceSecondName.child(UserDetails.username).removeEventListener(mChildEventListener);
             mChildEventListener = null;
+            mDeliveryChildEventListener = null;
         }
         super.onStop();
 
