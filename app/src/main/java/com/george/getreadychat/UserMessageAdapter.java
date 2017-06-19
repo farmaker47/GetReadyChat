@@ -2,9 +2,6 @@ package com.george.getreadychat;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,11 +16,14 @@ import java.util.List;
 public class UserMessageAdapter extends ArrayAdapter<UserMessage> {
 
     private Context mContext;
+    private List<UserMessage> objects;
     /*AfterPickingMessages act = (AfterPickingMessages) mContext;*/
 
     public UserMessageAdapter(Context context, int resource, List<UserMessage> objects) {
         super(context, resource, objects);
         this.mContext = context;
+        this.objects = objects;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -59,23 +59,22 @@ public class UserMessageAdapter extends ArrayAdapter<UserMessage> {
         timeTextView.setText(message.getTime());
         /*nameToNameTextView.setText(message.getNameToName());*/
 
-        if(message.getName().equals(UserDetails.username)){
+        if (message.getName().equals(UserDetails.username)) {
             authorTextView.setText(R.string.stringMyName);
 
-        }else{
+        } else {
             authorTextView.setText(message.getName());
         }
 
-        if (!message.getName().equals(UserDetails.username)) {
-            readedTextView.setVisibility(View.INVISIBLE);
-        }
-
-        if (message.getIsReaded().equals( "false")) {
+        if (message.getIsReaded().equals("false")) {
             readedTextView.setText("");
         } else {
             readedTextView.setText(R.string.readed);
         }
 
+        if (!message.getName().equals(UserDetails.username)) {
+            readedTextView.setText("");
+        }
 
         return convertView;
     }

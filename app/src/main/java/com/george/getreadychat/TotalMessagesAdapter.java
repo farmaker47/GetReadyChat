@@ -10,9 +10,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by farmaker1 on 11/06/2017.
- */
 
 public class TotalMessagesAdapter extends ArrayAdapter<String> {
 
@@ -37,15 +34,8 @@ public class TotalMessagesAdapter extends ArrayAdapter<String> {
 
         String s= getItem(position);
 
-
-
         dummyTextView.setText("User Messages");
         messageTextView.setText(s);
-
-
-
-
-
 
         return convertView;
     }

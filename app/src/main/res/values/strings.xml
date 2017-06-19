@@ -9,4 +9,5 @@
     <string name="privateMessage">Private message:</string>
     <string name="totalMessages">Total Messages:</string>
     <string name="readed">Seen</string>
+    <string name="textViewEmptyListview">Waiting to begin conversation or loading data!</string>
 </resources>

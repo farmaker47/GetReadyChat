@@ -3,6 +3,7 @@ package com.george.getreadychat;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.sip.SipAudioCall;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -16,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -43,12 +45,17 @@ public class UserToUserMessage extends AppCompatActivity {
 
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
 
+    private int lastListViewPosition;
+
     private ListView mMessageListView;
     private UserMessageAdapter mMessageAdapter;
     private ProgressBar mProgressBar;
     private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
+    private LinearLayout emptyLinearLayout;
+
+    private List<UserMessage> userMessages;
 
     private FirebaseDatabase mFirebaseDatabase;
 
@@ -92,11 +99,14 @@ public class UserToUserMessage extends AppCompatActivity {
         mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mSendButton = (Button) findViewById(R.id.sendButton);
+        emptyLinearLayout = (LinearLayout)findViewById(R.id.emptyLinearLayout);
 
         // Initialize message ListView and its adapter
-        List<UserMessage> userMessages = new ArrayList<>();
+        userMessages = new ArrayList<>();
         mMessageAdapter = new UserMessageAdapter(this, R.layout.item_message, userMessages);
         mMessageListView.setAdapter(mMessageAdapter);
+
+        mMessageListView.setEmptyView(emptyLinearLayout);
 
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -152,8 +162,9 @@ public class UserToUserMessage extends AppCompatActivity {
                 // Clear input box
                 mMessageEditText.setText("");
 
-                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                //Hide softKeybord
+                /*InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);*/
             }
         });
 
@@ -278,11 +289,18 @@ public class UserToUserMessage extends AppCompatActivity {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    /*userMessage.setIsReaded("true");*/
+                    /*getAllMessagesBetweenUsers(dataSnapshot);*/
+                    /////working
+                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
                     mMessageAdapter.add(userMessage);
-                    mMessageAdapter.notifyDataSetChanged();
+                    mMessageAdapter.notifyDataSetChanged();*/
+                    ///working
 
+                    UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+
+                    userMessages.add(userMessagee);
+
+                    mMessageAdapter.notifyDataSetChanged();
 
                     String datasnapshoti = dataSnapshot.getKey();
                     String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.username).getKey();
@@ -325,9 +343,46 @@ public class UserToUserMessage extends AppCompatActivity {
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    mMessageAdapter.clear();
+                   /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
+                    mMessageAdapter.add(userMessage);
+                    mMessageAdapter.notifyDataSetChanged();*/
 
+                    /*updateItemAtPosition(lastListViewPosition);*/
+
+                    /*//remove last item
+                    mMessageListView.removeViewAt(mMessageListView.getLastVisiblePosition());
                     mMessageAdapter.notifyDataSetChanged();
+*/
+                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
+                    mMessageAdapter.add(userMessage);*/
+
+                    /*runOnUiThread(new Runnable() {
+                        public void run() {
+                            mMessageAdapter.notifyDataSetChanged();
+                        }
+                    });*/
+
+                    /*recreate();
+                    mMessageAdapter.notifyDataSetChanged();*/
+
+                    /////////
+                    userMessages.remove(userMessages.size() - 1);
+
+                    UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+
+                    userMessages.add(userMessagee);
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                        mMessageAdapter.notifyDataSetChanged();
+                    }
+                    });
+
+                    /////////
+
+
+                    /*mMessageAdapter.notifyDataSetChanged();*/
+
 
                 }
 
@@ -360,6 +415,7 @@ public class UserToUserMessage extends AppCompatActivity {
         //for loading messages to the listview
         attachDatabaseReadListenertoListView();
 
+
         super.onStart();
     }
 
@@ -380,7 +436,6 @@ public class UserToUserMessage extends AppCompatActivity {
         super.onPause();
 
     }
-
 
 
     @Override
@@ -424,5 +479,32 @@ public class UserToUserMessage extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("EEE, d MMM, HH:mm");
         String date = df.format(Calendar.getInstance().getTime());
         return date;
+    }
+
+    private void updateItemAtPosition(int position) {
+        int visiblePosition = mMessageListView.getFirstVisiblePosition();
+        View view = mMessageListView.getChildAt(position - visiblePosition);
+        mMessageListView.getAdapter().getView(position, view, mMessageListView);
+    }
+
+    private void getAllMessagesBetweenUsers(DataSnapshot dataSnapshot){
+        for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+
+            UserMessage taskTitle = singleSnapshot.getValue(UserMessage.class);
+
+            List<UserMessage> userMessages = new ArrayList<>();
+            userMessages.add(taskTitle);
+
+            mMessageAdapter = new UserMessageAdapter(this, R.layout.item_message, userMessages);
+
+            mMessageListView.setAdapter(mMessageAdapter);
+           /* recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, allTask);
+            recyclerView.setAdapter(recyclerViewAdapter);
+
+
+            List<UserMessage> userMessages = new ArrayList<>();
+            mMessageAdapter = new UserMessageAdapter(this, R.layout.item_message, userMessages);
+            mMessageListView.setAdapter(mMessageAdapter);*/
+        }
     }
 }
