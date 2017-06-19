@@ -80,7 +80,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:enabled="false"
-            android:text="@string/send_button_label" />
+            android:text="@string/send_button_label"
+            android:background="@color/colorAccent"
+            android:textColor="#ffffff"/>
 
     </LinearLayout>
 

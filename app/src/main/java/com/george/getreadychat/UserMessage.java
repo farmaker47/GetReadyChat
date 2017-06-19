@@ -23,17 +23,19 @@ public class UserMessage {
     private String nameToName;
     private String time;
     private String isReaded;
+    private long timeStamp;
 
     public UserMessage() {
     }
 
-    public UserMessage(String text, String name, String nameToName, String photoUrl, String time, String isreaded) {
+    public UserMessage(String text, String name, String nameToName, String photoUrl, String time, String isreaded,long timestamp) {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;
         this.nameToName = nameToName;
         this.time = time;
         this.isReaded = isreaded;
+        this.timeStamp = timestamp;
 
     }
 
@@ -83,5 +85,12 @@ public class UserMessage {
 
     public void setIsReaded(String isreaded){
         this.isReaded = isreaded;
+    }
+
+    public long getTimeStamp(){
+        return timeStamp;
+    }
+    public void setTimeStamp(long timestamp){
+        this.timeStamp = timestamp;
     }
 }

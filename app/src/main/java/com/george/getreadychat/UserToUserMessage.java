@@ -1,9 +1,7 @@
 package com.george.getreadychat;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.net.sip.SipAudioCall;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -37,6 +34,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class UserToUserMessage extends AppCompatActivity {
@@ -99,7 +97,7 @@ public class UserToUserMessage extends AppCompatActivity {
         mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mSendButton = (Button) findViewById(R.id.sendButton);
-        emptyLinearLayout = (LinearLayout)findViewById(R.id.emptyLinearLayout);
+        emptyLinearLayout = (LinearLayout) findViewById(R.id.emptyLinearLayout);
 
         // Initialize message ListView and its adapter
         userMessages = new ArrayList<>();
@@ -149,12 +147,12 @@ public class UserToUserMessage extends AppCompatActivity {
             public void onClick(View view) {
 
                 //Creating a message
-                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded);
+                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds());
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReference.child(UserDetails.secondUser).push().setValue(userMessage);
 
 
-                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded);
+                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds());
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReferenceSecondName.child(UserDetails.username).push().setValue(userMessage2);
 
@@ -191,10 +189,10 @@ public class UserToUserMessage extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed);
+                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds());
                     mMessagesDatabaseReference.child(UserDetails.secondUser).push().setValue(userMessage);
 
-                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded);
+                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds());
                     //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                     mMessagesDatabaseReferenceSecondName.child(UserDetails.username).push().setValue(userMessage2);
 
@@ -374,8 +372,8 @@ public class UserToUserMessage extends AppCompatActivity {
 
                     runOnUiThread(new Runnable() {
                         public void run() {
-                        mMessageAdapter.notifyDataSetChanged();
-                    }
+                            mMessageAdapter.notifyDataSetChanged();
+                        }
                     });
 
                     /////////
@@ -481,14 +479,20 @@ public class UserToUserMessage extends AppCompatActivity {
         return date;
     }
 
+    private long getTimestampInMIliseconds() {
+        Date curDate = new Date();
+        long curMillis = curDate.getTime();
+        return curMillis;
+    }
+
     private void updateItemAtPosition(int position) {
         int visiblePosition = mMessageListView.getFirstVisiblePosition();
         View view = mMessageListView.getChildAt(position - visiblePosition);
         mMessageListView.getAdapter().getView(position, view, mMessageListView);
     }
 
-    private void getAllMessagesBetweenUsers(DataSnapshot dataSnapshot){
-        for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+    private void getAllMessagesBetweenUsers(DataSnapshot dataSnapshot) {
+        for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
             UserMessage taskTitle = singleSnapshot.getValue(UserMessage.class);
 
