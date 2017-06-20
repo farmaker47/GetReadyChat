@@ -39,6 +39,9 @@ import java.util.List;
 
 public class UserToUserMessage extends AppCompatActivity {
 
+    //check if activity is active
+    static boolean isActive = false;
+
     private static final int RC_PHOTO_PICKER = 2;
 
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
@@ -415,6 +418,7 @@ public class UserToUserMessage extends AppCompatActivity {
 
 
         super.onStart();
+        isActive=true;
     }
 
     @Override
@@ -446,6 +450,7 @@ public class UserToUserMessage extends AppCompatActivity {
             mDeliveryChildEventListener = null;
         }
         super.onStop();
+        isActive=false;
 
     }
 

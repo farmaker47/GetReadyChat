@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private ValueEventListener mValueEventListener;
+    private ChildEventListener mChildEventListener;
+
+    private Query queryTimestamp;
 
     private Button mMessageGeorge, mMessageMaria;
 
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //Method toodo onSingnedIn with the name of the user
                     onSignedInInitialize(user.getDisplayName());
+                    attachListenerForNotifications();
 
 
                 } else {
@@ -141,16 +145,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        attachListenerForNotifications();
-
+        /*runOnUiThread(new Runnable() {
+            public void run() {
+                attachListenerForNotifications();
+            }
+        });*/
     }
 
     @Override
     protected void onStart() {
-
-        attachListenerForNotifications();
-
         super.onStart();
+        runOnUiThread(new Runnable() {
+            public void run() {
+                attachListenerForNotifications();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMessagesDatabaseReference.removeEventListener(mValueEventListener);
+        /*queryTimestamp.removeEventListener(mChildEventListener);*/
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -158,6 +174,11 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(MainActivity.this, "You are signed in!!", Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        attachListenerForNotifications();
+                    }
+                });
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(MainActivity.this, "Cancelled!!", Toast.LENGTH_SHORT).show();
                 finish();
@@ -169,8 +190,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-
-        attachListenerForNotifications();
+        runOnUiThread(new Runnable() {
+            public void run() {
+                attachListenerForNotifications();
+            }
+        });
     }
 
     @Override
@@ -186,6 +210,11 @@ public class MainActivity extends AppCompatActivity {
 
         UserDetails.username = username;
         Log.e("usernameInDetails", UserDetails.username);
+        runOnUiThread(new Runnable() {
+            public void run() {
+                attachListenerForNotifications();
+            }
+        });
 
     }
 
@@ -288,10 +317,76 @@ public class MainActivity extends AppCompatActivity {
                     });*/
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Toast.makeText(MainActivity.this, postSnapshot.getKey(), Toast.LENGTH_SHORT).show();
-                        Query queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("timeStamp").limitToLast(1);
+                        queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("timeStamp").limitToLast(1);
 
                         UserDetails.secondUser = postSnapshot.getKey();
-                        Log.e("MainActivitySecond",UserDetails.secondUser);
+                        Log.e("MainActivitySecond", UserDetails.secondUser);
+
+                        /*if(mChildEventListener == null){
+                            mChildEventListener = new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    UserMessage usermessageOfLast = dataSnapshot.getValue(UserMessage.class);
+
+                                    String stringText = usermessageOfLast.getText();
+                                    String stringName = usermessageOfLast.getName();
+
+                                    Toast.makeText(MainActivity.this, stringText, Toast.LENGTH_SHORT).show();
+
+                                    UserToUserMessage userForCheckActive = null;
+
+                                    if (!usermessageOfLast.getName().equals(UserDetails.username) && !userForCheckActive.isActive) {
+
+                                        int notifyID = 1;
+
+                                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                                .setSmallIcon(R.drawable.ic_launcher)
+                                                .setContentTitle("Message from:\n " + usermessageOfLast.getName())
+                                                .setContentText(usermessageOfLast.getText())
+                                                .setOnlyAlertOnce(true)
+                                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                                        mBuilder.setAutoCancel(true);
+                                        mBuilder.setLocalOnly(false);
+
+                                        Intent resultIntent = new Intent(MainActivity.this, UserToUserMessage.class);
+
+
+                                        resultIntent.setAction("android.intent.action.MAIN");
+                                        resultIntent.addCategory("android.intent.category.LAUNCHER");
+
+                                        PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                        //building the notification
+                                        mBuilder.setContentIntent(resultPendingIntent);
+
+                                        mNotificationManager.notify(notifyID, mBuilder.build());
+                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            };
+                            queryTimestamp.addChildEventListener(mChildEventListener);
+                        }*/
 
                         queryTimestamp.addChildEventListener(new ChildEventListener() {
                             @Override
@@ -303,7 +398,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 Toast.makeText(MainActivity.this, stringText, Toast.LENGTH_SHORT).show();
 
-                                if (!usermessageOfLast.getName().equals(UserDetails.username) /*&& valueOfRead.equals("true"))*/) {
+                                UserToUserMessage userForCheckActive = null;
+
+                                if (!usermessageOfLast.getName().equals(UserDetails.username) && !userForCheckActive.isActive) {
 
                                     int notifyID = 1;
 
@@ -324,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                                     resultIntent.setAction("android.intent.action.MAIN");
                                     resultIntent.addCategory("android.intent.category.LAUNCHER");
 
-                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
 
                                     //building the notification
                                     mBuilder.setContentIntent(resultPendingIntent);
