@@ -24,11 +24,16 @@
         <activity
             android:name=".UserToUserMessage"
             android:label="@string/privateMessage"
-            android:parentActivityName="com.george.getreadychat.MainActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".TotalMessages"
+            android:label="@string/totalMessages"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".UserToUserMessageNotification"
             android:label="@string/privateMessage"
-            android:parentActivityName="com.george.getreadychat.MainActivity"></activity>
+            android:parentActivityName=".MainActivity"
+            ></activity>
     </application>
 
 </manifest>

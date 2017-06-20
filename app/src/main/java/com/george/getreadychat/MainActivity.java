@@ -255,40 +255,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    /*String datasnapshoti = dataSnapshot.child(UserDetails.secondUser).getKey();
-                    Toast.makeText(MainActivity.this,datasnapshoti,Toast.LENGTH_LONG).show();*/
-
-
-                    /*
-                    String ssstring = mMessagesDatabaseReference.child(dataSnapshot.getKey()).child("name").getKey();
-                    Toast.makeText(MainActivity.this,ssstring,Toast.LENGTH_SHORT).show();*/
-
-
-
-                    /*for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        for (DataSnapshot childd : child.getChildren()) {
-
-                            Query lastQuery = mMessagesDatabaseReference.child(child.getKey()).child(childd.getKey()).limitToLast(1);
-                            lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshotT) {
-                                    UserMessage userMessage = dataSnapshotT.getValue(UserMessage.class);
-                                    String text = userMessage.getName();
-
-                                    Toast.makeText(MainActivity.this,text,Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
-
-
-                        }
-                    }*/
-
                     //working loop for every second user,every message
                     /*for (DataSnapshot child : dataSnapshot.getChildren()) {
                         for (DataSnapshot childd : child.getChildren()) {
@@ -301,25 +267,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }*/
 
-                    /*Query queryTimestamp = mMessagesDatabaseReference.orderByChild("timeStamp").limitToLast(1);
-                    queryTimestamp.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            UserMessage usermessage = dataSnapshot.getValue(UserMessage.class);
-                            String stringName = usermessage.getName();
-                            Toast.makeText(MainActivity.this,stringName,Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });*/
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Toast.makeText(MainActivity.this, postSnapshot.getKey(), Toast.LENGTH_SHORT).show();
                         queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("timeStamp").limitToLast(1);
 
-                        UserDetails.secondUser = postSnapshot.getKey();
+                        /*UserDetails.secondUser = postSnapshot.getKey();*/
                         Log.e("MainActivitySecond", UserDetails.secondUser);
 
                         /*if(mChildEventListener == null){
@@ -395,39 +347,70 @@ public class MainActivity extends AppCompatActivity {
 
                                 String stringText = usermessageOfLast.getText();
                                 String stringName = usermessageOfLast.getName();
+                                String stringIsReaded = usermessageOfLast.getIsReaded();
 
                                 Toast.makeText(MainActivity.this, stringText, Toast.LENGTH_SHORT).show();
 
                                 UserToUserMessage userForCheckActive = null;
+                                UserToUserMessageNotification userForCheckNotificationActive = null;
 
-                                if (!usermessageOfLast.getName().equals(UserDetails.username) && !userForCheckActive.isActive) {
+                                //giving the notifications different id
+                                long notifyTimeStamp = usermessageOfLast.getTimeStamp();
+                                String time = Long.toString(notifyTimeStamp);
+                                String timi = time.substring(9);
+                                int notifyID = Integer.parseInt(timi);
 
-                                    int notifyID = 1;
+                                if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false")) {
+                                    if ((!userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification)||
+                                            (userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification)||
+                                            (!userForCheckActive.isActive && userForCheckNotificationActive.isActiveNotification)) {
 
-                                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                    /*UserDetails.secondUser = usermessageOfLast.getName();*/
 
-                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-                                            .setSmallIcon(R.drawable.ic_launcher)
-                                            .setContentTitle("Message from:\n " + usermessageOfLast.getName())
-                                            .setContentText(usermessageOfLast.getText())
-                                            .setOnlyAlertOnce(true)
-                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                                    mBuilder.setAutoCancel(true);
-                                    mBuilder.setLocalOnly(false);
+                                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-                                    Intent resultIntent = new Intent(MainActivity.this, UserToUserMessage.class);
+                                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                                .setSmallIcon(R.drawable.ic_launcher)
+                                                .setContentTitle("Message from:\n " + usermessageOfLast.getName())
+                                                .setContentText(usermessageOfLast.getText())
+                                                .setOnlyAlertOnce(true)
+                                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                                        mBuilder.setAutoCancel(true);
+                                        mBuilder.setLocalOnly(false);
 
+                                        Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
+                                    /*resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
 
-                                    resultIntent.setAction("android.intent.action.MAIN");
-                                    resultIntent.addCategory("android.intent.category.LAUNCHER");
+                                        UserDetails.UserChatsWith = usermessageOfLast.getName();
+                                    /*resultIntent.putExtra("chatsWith",stringOfChatsWith);*/
 
-                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
+                                        ///////
+                                    /*Intent a = new Intent(StringUsernameMessages.this, AfterPickingMessages.class);
+                                     a.putExtra("4444", string2);
+                                     a.putExtra("myUsername", strUsername);
+                                     a.putExtra("myPersonalMessages", text);
+                                     a.putExtra("secondName", secondName);
+                                    startActivity(a);*/
 
-                                    //building the notification
-                                    mBuilder.setContentIntent(resultPendingIntent);
+                                    /*Intent intent = getIntent();
+                                    String strUsername = intent.getStringExtra("myUsername");
+                                    String strPersonal = intent.getStringExtra("myPersonalMessages");
+                                    Log.e("AllMessages",strUsername);*/
+                                        //////
 
-                                    mNotificationManager.notify(notifyID, mBuilder.build());
+                                        resultIntent.setAction("android.intent.action.MAIN");
+                                        resultIntent.addCategory("android.intent.category.LAUNCHER");
+
+                                        //flag to upddate current or create new one
+                                        PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
+
+                                        //building the notification
+                                        mBuilder.setContentIntent(resultPendingIntent);
+
+                                        mNotificationManager.notify(notifyID, mBuilder.build());
+                                    }
                                 }
+
                             }
 
                             @Override
