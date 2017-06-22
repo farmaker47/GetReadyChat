@@ -2,18 +2,21 @@ package com.george.getreadychat;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +36,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
 
     private static final String TAG = "MainActivity";
 
@@ -58,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private Query queryTimestamp;
 
     private Button mMessageGeorge, mMessageMaria;
+
+    private ArrayList<Integer> numbers;
+    private Random randomGenerator;
+    private int random;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        numbers = new ArrayList<Integer>();
+        randomGenerator = new Random();
 
         mMessageGeorge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,6 +289,15 @@ public class MainActivity extends AppCompatActivity {
                         /*UserDetails.secondUser = postSnapshot.getKey();*/
                         Log.e("MainActivitySecond", UserDetails.secondUser);
 
+
+                        /*random = randomGenerator.nextInt(50);
+                        String randomized = String.valueOf(random);
+                        Toast.makeText(MainActivity.this, randomized, Toast.LENGTH_LONG).show();
+                        if (!numbers.contains(random)) {
+                            numbers.add(random);
+                        }*/
+
+
                         /*if(mChildEventListener == null){
                             mChildEventListener = new ChildEventListener() {
                                 @Override
@@ -354,37 +378,41 @@ public class MainActivity extends AppCompatActivity {
                                 UserToUserMessage userForCheckActive = null;
                                 UserToUserMessageNotification userForCheckNotificationActive = null;
 
-                                //giving the notifications different id
+                                /*//giving the notifications different id
                                 long notifyTimeStamp = usermessageOfLast.getTimeStamp();
                                 String time = Long.toString(notifyTimeStamp);
                                 String timi = time.substring(9);
-                                int notifyID = Integer.parseInt(timi);
+                                int notifyID = Integer.parseInt(timi);*/
 
-                                if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false")) {
-                                    if ((!userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification)||
-                                            (userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification)||
-                                            (!userForCheckActive.isActive && userForCheckNotificationActive.isActiveNotification)) {
+                                int notifyID = 1;
 
-                                    /*UserDetails.secondUser = usermessageOfLast.getName();*/
 
-                                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") &&
+                                        !userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification) {
 
-                                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-                                                .setSmallIcon(R.drawable.ic_launcher)
-                                                .setContentTitle("Message from:\n " + usermessageOfLast.getName())
-                                                .setContentText(usermessageOfLast.getText())
-                                                .setOnlyAlertOnce(true)
-                                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                                        mBuilder.setAutoCancel(true);
-                                        mBuilder.setLocalOnly(false);
+                                    String tagStringForNotification = usermessageOfLast.getName();
 
-                                        Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
+                                    /*userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification||
+                                            !userForCheckActive.isActive && userForCheckNotificationActive.isActiveNotification*/
+                                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                            .setSmallIcon(R.drawable.ic_launcher)
+                                            .setContentTitle(usermessageOfLast.getName() +"\t" + "said:")
+                                            .setContentText(usermessageOfLast.getText())
+                                            .setOnlyAlertOnce(true)
+                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                                    mBuilder.setAutoCancel(true);
+                                    mBuilder.setLocalOnly(false);
+
+                                    Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
+                                    resultIntent.putExtra("chatsWith", tagStringForNotification);
                                     /*resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
 
-                                        UserDetails.UserChatsWith = usermessageOfLast.getName();
+
                                     /*resultIntent.putExtra("chatsWith",stringOfChatsWith);*/
 
-                                        ///////
+                                    ///////
                                     /*Intent a = new Intent(StringUsernameMessages.this, AfterPickingMessages.class);
                                      a.putExtra("4444", string2);
                                      a.putExtra("myUsername", strUsername);
@@ -396,19 +424,113 @@ public class MainActivity extends AppCompatActivity {
                                     String strUsername = intent.getStringExtra("myUsername");
                                     String strPersonal = intent.getStringExtra("myPersonalMessages");
                                     Log.e("AllMessages",strUsername);*/
-                                        //////
+                                    //////
 
-                                        resultIntent.setAction("android.intent.action.MAIN");
-                                        resultIntent.addCategory("android.intent.category.LAUNCHER");
+                                    resultIntent.setAction(Long.toString(System.currentTimeMillis()));
+                                    /*resultIntent.setAction("android.intent.action.MAIN");
+                                    resultIntent.addCategory("android.intent.category.LAUNCHER");*/
 
-                                        //flag to upddate current or create new one
-                                        PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
+                                    //flag to upddate current or create new one
+                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
 
-                                        //building the notification
-                                        mBuilder.setContentIntent(resultPendingIntent);
+                                    //building the notification
+                                    mBuilder.setContentIntent(resultPendingIntent);
 
-                                        mNotificationManager.notify(notifyID, mBuilder.build());
-                                    }
+                                    //use tag string to update current
+                                    mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
+
+                                } else if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") &&
+                                        !userForCheckNotificationActive.isActiveNotification && userForCheckActive.isActive && !stringName.equals(UserDetails.secondUser)) {
+
+                                    String tagStringForNotification = usermessageOfLast.getName();
+
+                                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                            .setSmallIcon(R.drawable.ic_launcher)
+                                            .setContentTitle(usermessageOfLast.getName() +"\t" + "said:")
+                                            .setContentText(usermessageOfLast.getText())
+                                            .setOnlyAlertOnce(true)
+                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                                    mBuilder.setAutoCancel(true);
+                                    mBuilder.setLocalOnly(false);
+
+                                    Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
+                                    resultIntent.putExtra("chatsWith", tagStringForNotification);
+
+                                    /*resultIntent.putExtra("chatsWith",stringOfChatsWith);*/
+
+                                    ///////
+                                    /*Intent a = new Intent(StringUsernameMessages.this, AfterPickingMessages.class);
+                                     a.putExtra("4444", string2);
+                                     a.putExtra("myUsername", strUsername);
+                                     a.putExtra("myPersonalMessages", text);
+                                     a.putExtra("secondName", secondName);
+                                    startActivity(a);*/
+
+                                    /*Intent intent = getIntent();
+                                    String strUsername = intent.getStringExtra("myUsername");
+                                    String strPersonal = intent.getStringExtra("myPersonalMessages");
+                                    Log.e("AllMessages",strUsername);*/
+                                    //////
+
+                                    resultIntent.setAction(Long.toString(System.currentTimeMillis()));
+                                    /*resultIntent.setAction("android.intent.action.MAIN");
+                                    resultIntent.addCategory("android.intent.category.LAUNCHER");*/
+
+                                    //flag to upddate current or create new one
+                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+
+                                    //building the notification
+                                    mBuilder.setContentIntent(resultPendingIntent);
+
+                                    mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
+
+                                } else if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") && !userForCheckActive.isActive &&
+                                        userForCheckNotificationActive.isActiveNotification && !stringName.equals(UserDetails.UserChatsWith)) {
+
+                                    String tagStringForNotification = usermessageOfLast.getName();
+
+                                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                            .setSmallIcon(R.drawable.ic_launcher)
+                                            .setContentTitle(usermessageOfLast.getName() +"\t" + "said:")
+                                            .setContentText(usermessageOfLast.getText())
+                                            .setOnlyAlertOnce(true)
+                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                                    mBuilder.setAutoCancel(true);
+                                    mBuilder.setLocalOnly(false);
+
+                                    Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
+                                    resultIntent.putExtra("chatsWith", tagStringForNotification);
+
+                                    ///////
+                                    /*Intent a = new Intent(StringUsernameMessages.this, AfterPickingMessages.class);
+                                     a.putExtra("4444", string2);
+                                     a.putExtra("myUsername", strUsername);
+                                     a.putExtra("myPersonalMessages", text);
+                                     a.putExtra("secondName", secondName);
+                                    startActivity(a);*/
+
+                                    /*Intent intent = getIntent();
+                                    String strUsername = intent.getStringExtra("myUsername");
+                                    String strPersonal = intent.getStringExtra("myPersonalMessages");
+                                    Log.e("AllMessages",strUsername);*/
+                                    //////
+
+
+                                    resultIntent.setAction(Long.toString(System.currentTimeMillis()));
+                                    /*resultIntent.setAction("android.intent.action.MAIN");
+                                    resultIntent.addCategory("android.intent.category.LAUNCHER");*/
+
+                                    //flag to upddate current or create new one
+                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                    //building the notification
+                                    mBuilder.setContentIntent(resultPendingIntent);
+
+                                    mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
                                 }
 
                             }
@@ -449,4 +571,30 @@ public class MainActivity extends AppCompatActivity {
             mMessagesDatabaseReference.addValueEventListener(mValueEventListener);
         }
     }
+
+    /**
+     * Is Notification Service Enabled.
+     * Verifies if the notification listener service is enabled.
+     * Got it from: https://github.com/kpbird/NotificationListenerService-Example/blob/master/NLSExample/src/main/java/com/kpbird/nlsexample/NLService.java
+     *
+     * @return True if eanbled, false otherwise.
+     */
+    private boolean isNotificationServiceEnabled() {
+        String pkgName = getPackageName();
+        final String flat = Settings.Secure.getString(getContentResolver(),
+                ENABLED_NOTIFICATION_LISTENERS);
+        if (!TextUtils.isEmpty(flat)) {
+            final String[] names = flat.split(":");
+            for (int i = 0; i < names.length; i++) {
+                final ComponentName cn = ComponentName.unflattenFromString(names[i]);
+                if (cn != null) {
+                    if (TextUtils.equals(pkgName, cn.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }

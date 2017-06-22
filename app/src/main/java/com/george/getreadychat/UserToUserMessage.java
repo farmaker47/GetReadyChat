@@ -436,6 +436,7 @@ public class UserToUserMessage extends AppCompatActivity {
         mDeliveryChildEventListener = null;
 
         super.onPause();
+        isActive=false;
 
     }
 

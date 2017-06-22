@@ -1,8 +1,11 @@
 package com.george.getreadychat;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.service.notification.NotificationListenerService;
+import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -72,14 +75,17 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotosStorageReference;
 
+    private StatusBarNotification mStatusBarNotification;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_to_user_message);
 
-        /*Intent intent = getIntent();
-        UserDetails.UserChatsWith = intent.getStringExtra("chatsWith");*/
+        Intent intent = getIntent();
+        UserDetails.UserChatsWith = intent.getStringExtra("chatsWith");
+        /*String ad = intent.getStringExtra("title");*/
         Log.e("UserChatsWith", UserDetails.UserChatsWith);
 
 
@@ -422,7 +428,11 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
 
         super.onStart();
-        isActiveNotification=true;
+        isActiveNotification = true;
+
+        /*Intent intent = getIntent();
+        UserDetails.UserChatsWith = intent.getStringExtra("chatsWith");
+        Log.e("UserChatsWith", UserDetails.UserChatsWith);*/
     }
 
     @Override
@@ -440,7 +450,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         mDeliveryChildEventListener = null;
 
         super.onPause();
-
+        isActiveNotification = false;
     }
 
 
@@ -454,7 +464,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             mDeliveryChildEventListener = null;
         }
         super.onStop();
-        isActiveNotification=false;
+        isActiveNotification = false;
 
     }
 
