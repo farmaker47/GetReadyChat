@@ -8,4 +8,6 @@ public class UserDetails {
 
     public static String readed = "true";
     public static String notReaded = "false";
+
+    public static long numberOfMessages = 0;
 }

@@ -25,7 +25,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Message Maria"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="50dp"/>
+    <Button
+        android:id="@+id/mapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map"
+        android:layout_marginTop="50dp"/>
+
 
 
 </LinearLayout>

@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     //A class that reference to spesific part of database
     private DatabaseReference mMessagesDatabaseReference;
+    private DatabaseReference mNumberOfMessages;
 
     //variable fr auth state listener
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -64,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
     private ChildEventListener mChildEventListener;
 
     private Query queryTimestamp;
+    private Query queryChildrenCount;
 
-    private Button mMessageGeorge, mMessageMaria;
+    private Button mMessageGeorge, mMessageMaria,mMapButton;
 
     private ArrayList<Integer> numbers;
     private Random randomGenerator;
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
         mMessageGeorge = (Button) findViewById(R.id.messageGeorgeButton);
         mMessageMaria = (Button) findViewById(R.id.messageMariaButton);
+        mMapButton = (Button)findViewById(R.id.mapButton);
 
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -157,6 +160,14 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intentToUserMessage = new Intent(MainActivity.this, UserToUserMessage.class);
                 startActivity(intentToUserMessage);
+            }
+        });
+
+        mMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mapIntent = new Intent (MainActivity.this,MapsActivity.class);
+                startActivity(mapIntent);
             }
         });
 
@@ -285,17 +296,46 @@ public class MainActivity extends AppCompatActivity {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         /*Toast.makeText(MainActivity.this, postSnapshot.getKey(), Toast.LENGTH_SHORT).show();*/
                         queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("timeStamp").limitToLast(1);
+                        /*queryChildrenCount = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("isReaded").equalTo("false");*/
+
+
+                        mNumberOfMessages = mMessagesDatabaseReference.child(postSnapshot.getKey());
+                        if (mChildEventListener == null) {
+                            mChildEventListener = new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
+                                    String falseCount = userMessage.getIsReaded();
+                                    if (falseCount.equals("false")){
+                                        UserDetails.numberOfMessages=UserDetails.numberOfMessages +1;
+                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            };
+                            mNumberOfMessages.addChildEventListener(mChildEventListener);
+                        }
 
                         /*UserDetails.secondUser = postSnapshot.getKey();*/
                         Log.e("MainActivitySecond", UserDetails.secondUser);
-
-
-                        /*random = randomGenerator.nextInt(50);
-                        String randomized = String.valueOf(random);
-                        Toast.makeText(MainActivity.this, randomized, Toast.LENGTH_LONG).show();
-                        if (!numbers.contains(random)) {
-                            numbers.add(random);
-                        }*/
 
 
                         queryTimestamp.addChildEventListener(new ChildEventListener() {
@@ -332,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
                                             .setSmallIcon(R.drawable.ic_launcher)
-                                            .setContentTitle(usermessageOfLast.getName() +"\t" + "said:")
+                                            .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
                                             .setContentText(usermessageOfLast.getText())
                                             .setOnlyAlertOnce(true)
                                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
@@ -347,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                                     //flag to upddate current or create new one
-                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                                     //building the notification
                                     mBuilder.setContentIntent(resultPendingIntent);
@@ -364,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
                                             .setSmallIcon(R.drawable.ic_launcher)
-                                            .setContentTitle(usermessageOfLast.getName() +"\t" + "said:")
+                                            .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
                                             .setContentText(usermessageOfLast.getText())
                                             .setOnlyAlertOnce(true)
                                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
@@ -377,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
                                     resultIntent.setAction(Long.toString(System.currentTimeMillis()));
 
                                     //flag to upddate current or create new one
-                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                                     //building the notification
                                     mBuilder.setContentIntent(resultPendingIntent);
@@ -393,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
                                             .setSmallIcon(R.drawable.ic_launcher)
-                                            .setContentTitle(usermessageOfLast.getName() +"\t" + "said:")
+                                            .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
                                             .setContentText(usermessageOfLast.getText())
                                             .setOnlyAlertOnce(true)
                                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));

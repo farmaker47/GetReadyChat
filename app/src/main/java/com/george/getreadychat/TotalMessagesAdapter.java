@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.george.getreadychat.data.UserDetails;
+
 import java.util.List;
 
 
@@ -31,11 +33,15 @@ public class TotalMessagesAdapter extends ArrayAdapter<String> {
 
         TextView messageTextView = (TextView) convertView.findViewById(R.id.allMessageTextView);
         TextView dummyTextView = (TextView) convertView.findViewById(R.id.allNameTextView);
+        TextView numberTextView = (TextView) convertView.findViewById(R.id.allNumberTextView);
 
         String s= getItem(position);
 
         dummyTextView.setText("User Messages");
         messageTextView.setText(s);
+
+        String numberOfMessages = String.valueOf(UserDetails.numberOfMessages);
+        numberTextView.setText(numberOfMessages);
 
         return convertView;
     }
