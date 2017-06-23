@@ -238,34 +238,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                     ////
                     /*friendlyMessage.setIsReaded(true);*/
 
-                    /*if (!userMessage.getName().equals(UserDetails.username) *//*&& valueOfRead.equals("true"))*//* ){
-
-                        int notifyID = 1;
-
-                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(UserToUserMessage.this)
-                                .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle("Message from:\n " + UserDetails.secondUser)
-                                .setContentText(userMessage.getText())
-                                .setOnlyAlertOnce(true)
-                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                        mBuilder.setAutoCancel(true);
-                        mBuilder.setLocalOnly(false);
-
-                        Intent resultIntent = new Intent(UserToUserMessage.this, UserToUserMessage.class);
-
-
-                        resultIntent.setAction("android.intent.action.MAIN");
-                        resultIntent.addCategory("android.intent.category.LAUNCHER");
-
-                        PendingIntent resultPendingIntent = PendingIntent.getActivity(UserToUserMessage.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                        //building the notification
-                        mBuilder.setContentIntent(resultPendingIntent);
-
-                        mNotificationManager.notify(notifyID, mBuilder.build());
-                    }*/
                 }
 
                 @Override
@@ -323,34 +295,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                     ////
                     /*friendlyMessage.setIsReaded(true);*/
 
-                    /*if (!userMessage.getName().equals(UserDetails.username) *//*&& valueOfRead.equals("true"))*//* ){
 
-                        int notifyID = 1;
-
-                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(UserToUserMessage.this)
-                                .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle("Message from:\n " + UserDetails.secondUser)
-                                .setContentText(userMessage.getText())
-                                .setOnlyAlertOnce(true)
-                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                        mBuilder.setAutoCancel(true);
-                        mBuilder.setLocalOnly(false);
-
-                        Intent resultIntent = new Intent(UserToUserMessage.this, UserToUserMessage.class);
-
-
-                        resultIntent.setAction("android.intent.action.MAIN");
-                        resultIntent.addCategory("android.intent.category.LAUNCHER");
-
-                        PendingIntent resultPendingIntent = PendingIntent.getActivity(UserToUserMessage.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                        //building the notification
-                        mBuilder.setContentIntent(resultPendingIntent);
-
-                        mNotificationManager.notify(notifyID, mBuilder.build());
-                    }*/
                 }
 
                 @Override

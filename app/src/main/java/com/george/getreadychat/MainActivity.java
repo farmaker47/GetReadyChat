@@ -298,72 +298,6 @@ public class MainActivity extends AppCompatActivity {
                         }*/
 
 
-                        /*if(mChildEventListener == null){
-                            mChildEventListener = new ChildEventListener() {
-                                @Override
-                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                    UserMessage usermessageOfLast = dataSnapshot.getValue(UserMessage.class);
-
-                                    String stringText = usermessageOfLast.getText();
-                                    String stringName = usermessageOfLast.getName();
-
-                                    Toast.makeText(MainActivity.this, stringText, Toast.LENGTH_SHORT).show();
-
-                                    UserToUserMessage userForCheckActive = null;
-
-                                    if (!usermessageOfLast.getName().equals(UserDetails.username) && !userForCheckActive.isActive) {
-
-                                        int notifyID = 1;
-
-                                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-                                                .setSmallIcon(R.drawable.ic_launcher)
-                                                .setContentTitle("Message from:\n " + usermessageOfLast.getName())
-                                                .setContentText(usermessageOfLast.getText())
-                                                .setOnlyAlertOnce(true)
-                                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                                        mBuilder.setAutoCancel(true);
-                                        mBuilder.setLocalOnly(false);
-
-                                        Intent resultIntent = new Intent(MainActivity.this, UserToUserMessage.class);
-
-
-                                        resultIntent.setAction("android.intent.action.MAIN");
-                                        resultIntent.addCategory("android.intent.category.LAUNCHER");
-
-                                        PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                        //building the notification
-                                        mBuilder.setContentIntent(resultPendingIntent);
-
-                                        mNotificationManager.notify(notifyID, mBuilder.build());
-                                    }
-                                }
-
-                                @Override
-                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                }
-
-                                @Override
-                                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                }
-
-                                @Override
-                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            };
-                            queryTimestamp.addChildEventListener(mChildEventListener);
-                        }*/
-
                         queryTimestamp.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -409,26 +343,8 @@ public class MainActivity extends AppCompatActivity {
                                     resultIntent.putExtra("chatsWith", tagStringForNotification);
                                     /*resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
 
-
-                                    /*resultIntent.putExtra("chatsWith",stringOfChatsWith);*/
-
-                                    ///////
-                                    /*Intent a = new Intent(StringUsernameMessages.this, AfterPickingMessages.class);
-                                     a.putExtra("4444", string2);
-                                     a.putExtra("myUsername", strUsername);
-                                     a.putExtra("myPersonalMessages", text);
-                                     a.putExtra("secondName", secondName);
-                                    startActivity(a);*/
-
-                                    /*Intent intent = getIntent();
-                                    String strUsername = intent.getStringExtra("myUsername");
-                                    String strPersonal = intent.getStringExtra("myPersonalMessages");
-                                    Log.e("AllMessages",strUsername);*/
-                                    //////
-
                                     resultIntent.setAction(Long.toString(System.currentTimeMillis()));
-                                    /*resultIntent.setAction("android.intent.action.MAIN");
-                                    resultIntent.addCategory("android.intent.category.LAUNCHER");*/
+
 
                                     //flag to upddate current or create new one
                                     PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
@@ -458,25 +374,7 @@ public class MainActivity extends AppCompatActivity {
                                     Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
                                     resultIntent.putExtra("chatsWith", tagStringForNotification);
 
-                                    /*resultIntent.putExtra("chatsWith",stringOfChatsWith);*/
-
-                                    ///////
-                                    /*Intent a = new Intent(StringUsernameMessages.this, AfterPickingMessages.class);
-                                     a.putExtra("4444", string2);
-                                     a.putExtra("myUsername", strUsername);
-                                     a.putExtra("myPersonalMessages", text);
-                                     a.putExtra("secondName", secondName);
-                                    startActivity(a);*/
-
-                                    /*Intent intent = getIntent();
-                                    String strUsername = intent.getStringExtra("myUsername");
-                                    String strPersonal = intent.getStringExtra("myPersonalMessages");
-                                    Log.e("AllMessages",strUsername);*/
-                                    //////
-
                                     resultIntent.setAction(Long.toString(System.currentTimeMillis()));
-                                    /*resultIntent.setAction("android.intent.action.MAIN");
-                                    resultIntent.addCategory("android.intent.category.LAUNCHER");*/
 
                                     //flag to upddate current or create new one
                                     PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
@@ -505,26 +403,7 @@ public class MainActivity extends AppCompatActivity {
                                     Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
                                     resultIntent.putExtra("chatsWith", tagStringForNotification);
 
-
-                                    ///////
-                                    /*Intent a = new Intent(StringUsernameMessages.this, AfterPickingMessages.class);
-                                     a.putExtra("4444", string2);
-                                     a.putExtra("myUsername", strUsername);
-                                     a.putExtra("myPersonalMessages", text);
-                                     a.putExtra("secondName", secondName);
-                                    startActivity(a);*/
-
-                                    /*Intent intent = getIntent();
-                                    String strUsername = intent.getStringExtra("myUsername");
-                                    String strPersonal = intent.getStringExtra("myPersonalMessages");
-                                    Log.e("AllMessages",strUsername);*/
-                                    //////
-
-
                                     resultIntent.setAction(Long.toString(System.currentTimeMillis()));
-
-                                    /*resultIntent.setAction("android.intent.action.MAIN");
-                                    resultIntent.addCategory("android.intent.category.LAUNCHER");*/
 
                                     //flag to upddate current or create new one
                                     PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
