@@ -78,9 +78,6 @@ public class UserToUserMessage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_to_user_message);
 
-
-        /*Toast.makeText(this,"Second User= " + UserDetails.secondUser,Toast.LENGTH_LONG).show();*/
-
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -424,7 +421,6 @@ public class UserToUserMessage extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        /*mMessagesDatabaseReference2.child(strPersonal).child(str4444).child("-Kmk26FldvLoZoXv2-W5").child("isReaded").setValue("true");*/
     }
 
     @Override
@@ -437,6 +433,7 @@ public class UserToUserMessage extends AppCompatActivity {
 
         super.onPause();
         isActive=false;
+
 
     }
 
@@ -452,6 +449,7 @@ public class UserToUserMessage extends AppCompatActivity {
         }
         super.onStop();
         isActive=false;
+
 
     }
 

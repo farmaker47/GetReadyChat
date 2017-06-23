@@ -1,10 +1,8 @@
 package com.george.getreadychat;
 
-import android.app.Notification;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -82,6 +80,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_to_user_message);
+
+        isActiveNotification = true;
+
 
         Intent intent = getIntent();
         UserDetails.UserChatsWith = intent.getStringExtra("chatsWith");
@@ -180,6 +181,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         });
 
         /*attachDatabaseReadListener();*/
+
     }
 
     @Override
@@ -429,16 +431,11 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         super.onStart();
         isActiveNotification = true;
-
-        /*Intent intent = getIntent();
-        UserDetails.UserChatsWith = intent.getStringExtra("chatsWith");
-        Log.e("UserChatsWith", UserDetails.UserChatsWith);*/
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        /*mMessagesDatabaseReference2.child(strPersonal).child(str4444).child("-Kmk26FldvLoZoXv2-W5").child("isReaded").setValue("true");*/
     }
 
     @Override
@@ -464,10 +461,15 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             mDeliveryChildEventListener = null;
         }
         super.onStop();
-        isActiveNotification = false;
-
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        isActiveNotification = true;
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

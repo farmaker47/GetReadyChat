@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
                     }*/
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Toast.makeText(MainActivity.this, postSnapshot.getKey(), Toast.LENGTH_SHORT).show();
+                        /*Toast.makeText(MainActivity.this, postSnapshot.getKey(), Toast.LENGTH_SHORT).show();*/
                         queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("timeStamp").limitToLast(1);
 
                         /*UserDetails.secondUser = postSnapshot.getKey();*/
@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
                                 String stringName = usermessageOfLast.getName();
                                 String stringIsReaded = usermessageOfLast.getIsReaded();
 
-                                Toast.makeText(MainActivity.this, stringText, Toast.LENGTH_SHORT).show();
+                                /*Toast.makeText(MainActivity.this, stringText, Toast.LENGTH_SHORT).show();*/
 
                                 UserToUserMessage userForCheckActive = null;
                                 UserToUserMessageNotification userForCheckNotificationActive = null;
@@ -505,6 +505,7 @@ public class MainActivity extends AppCompatActivity {
                                     Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
                                     resultIntent.putExtra("chatsWith", tagStringForNotification);
 
+
                                     ///////
                                     /*Intent a = new Intent(StringUsernameMessages.this, AfterPickingMessages.class);
                                      a.putExtra("4444", string2);
@@ -521,6 +522,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                                     resultIntent.setAction(Long.toString(System.currentTimeMillis()));
+
                                     /*resultIntent.setAction("android.intent.action.MAIN");
                                     resultIntent.addCategory("android.intent.category.LAUNCHER");*/
 

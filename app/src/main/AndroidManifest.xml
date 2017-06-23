@@ -34,7 +34,6 @@
             android:label="@string/privateMessage"
             android:parentActivityName=".MainActivity"></activity>
 
-
     </application>
 
 </manifest>
