@@ -3,6 +3,7 @@ package com.george.getreadychat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker sydneyy, mandress;
@@ -56,14 +57,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .title("Mandres")
                 .snippet("Farmaker")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 17));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
 
         mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(MapsActivity.this,UserToUserMessage.class);
+                Intent intent = new Intent(MapsActivity.this, UserToUserMessage.class);
                 startActivity(intent);
                 UserDetails.secondUser = "george soloupis";
             }

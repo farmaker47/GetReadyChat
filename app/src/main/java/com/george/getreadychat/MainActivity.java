@@ -45,12 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    public static final int RC_SIGN_IN = 1;
+    /*public static final int RC_SIGN_IN = 1;
+    * //instance of Firebase auth
+    private FirebaseAuth mFirebaseAuth;
+    //variable fr auth state listener
+    private FirebaseAuth.AuthStateListener mAuthStateListener;*/
 
     private String mUsername;
 
-    //instance of Firebase auth
-    private FirebaseAuth mFirebaseAuth;
+
 
     private FirebaseDatabase mFirebaseDatabase;
 
@@ -58,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mMessagesDatabaseReference;
     private DatabaseReference mNumberOfMessages;
 
-    //variable fr auth state listener
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
 
     private ValueEventListener mValueEventListener;
     private ChildEventListener mChildEventListener;
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private Query queryTimestamp;
     private Query queryChildrenCount;
 
-    private Button mMessageGeorge, mMessageMaria,mMapButton;
+    private Button mMessageGeorge, mMessageMaria, mMapButton;
 
     private ArrayList<Integer> numbers;
     private Random randomGenerator;
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toast.makeText(MainActivity.this, "MainOnCreate", Toast.LENGTH_SHORT).show();
+
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         // Get details on the currently active default data
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -87,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        //iniializing the auth
+        /*//iniializing the auth
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -99,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
                     //Method toodo onSingnedIn with the name of the user
                     onSignedInInitialize(user.getDisplayName());
-                    attachListenerForNotifications();
-
 
                 } else {
 
@@ -113,11 +115,11 @@ public class MainActivity extends AppCompatActivity {
                                     .setProviders(AuthUI.EMAIL_PROVIDER, AuthUI.GOOGLE_PROVIDER).build(), RC_SIGN_IN);
                 }
             }
-        };
+        };*/
 
         mMessageGeorge = (Button) findViewById(R.id.messageGeorgeButton);
         mMessageMaria = (Button) findViewById(R.id.messageMariaButton);
-        mMapButton = (Button)findViewById(R.id.mapButton);
+        mMapButton = (Button) findViewById(R.id.mapButton);
 
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         mMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mapIntent = new Intent (MainActivity.this,MapsActivity.class);
+                Intent mapIntent = new Intent(MainActivity.this, MapsActivity.class);
                 startActivity(mapIntent);
             }
         });
@@ -176,58 +178,54 @@ public class MainActivity extends AppCompatActivity {
                 attachListenerForNotifications();
             }
         });*/
+
+
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-        runOnUiThread(new Runnable() {
-            public void run() {
-                attachListenerForNotifications();
-            }
-        });
+        attachListenerForNotifications();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mMessagesDatabaseReference.removeEventListener(mValueEventListener);
-        /*queryTimestamp.removeEventListener(mChildEventListener);*/
+        /*mMessagesDatabaseReference.removeEventListener(mValueEventListener);
+        queryTimestamp.removeEventListener(mChildEventListener);*/
+
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(MainActivity.this, "You are signed in!!", Toast.LENGTH_SHORT).show();
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        attachListenerForNotifications();
-                    }
-                });
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(MainActivity.this, "Cancelled!!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-        runOnUiThread(new Runnable() {
-            public void run() {
-                attachListenerForNotifications();
-            }
-        });
+        /*mFirebaseAuth.addAuthStateListener(mAuthStateListener);*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuthStateListener != null) {
+        /*if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }*/
+    }
+
+   /* protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(MainActivity.this, "You are signed in!!", Toast.LENGTH_SHORT).show();
+
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(MainActivity.this, "Cancelled!!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
 
@@ -236,23 +234,18 @@ public class MainActivity extends AppCompatActivity {
 
         UserDetails.username = username;
         Log.e("usernameInDetails", UserDetails.username);
-        runOnUiThread(new Runnable() {
-            public void run() {
-                attachListenerForNotifications();
-            }
-        });
 
     }
 
     private void onSignedOutCleanup() {
         mUsername = "anonymous";
-    }
+    }*/
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_total_messages, menu);
         return true;
     }
 
@@ -262,11 +255,8 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.sign_out_menu:
-                //sign out
-                AuthUI.getInstance().signOut(this);
-                return true;
-            case R.id.action_settings:
+
+            case R.id.action_totalmessages:
                 Intent intentToTotalMessages = new Intent(MainActivity.this, TotalMessages.class);
                 startActivity(intentToTotalMessages);
                 return true;
@@ -276,10 +266,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void attachListenerForNotifications() {
+
         if (mValueEventListener == null) {
+            Log.e("attachlistener", "executed");
             mValueEventListener = new ValueEventListener() {
+
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.e("attachlistener", "ondatachanged");
 
                     //working loop for every second user,every message
                     /*for (DataSnapshot child : dataSnapshot.getChildren()) {
@@ -306,8 +300,8 @@ public class MainActivity extends AppCompatActivity {
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                     UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
                                     String falseCount = userMessage.getIsReaded();
-                                    if (falseCount.equals("false")){
-                                        UserDetails.numberOfMessages=UserDetails.numberOfMessages +1;
+                                    if (falseCount.equals("false")) {
+                                        UserDetails.numberOfMessages = UserDetails.numberOfMessages + 1;
                                     }
                                 }
 

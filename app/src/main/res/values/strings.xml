@@ -12,4 +12,5 @@
     <string name="textViewEmptyListview">Waiting to begin conversation or loading data!</string>
     <string name="title_activity_user_to_user_message_notification">UserToUserMessageNotification</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_intro_screen">IntroScreen</string>
 </resources>
