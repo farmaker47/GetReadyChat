@@ -287,27 +287,19 @@ public class UserToUserMessage extends AppCompatActivity {
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                   /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    mMessageAdapter.add(userMessage);
-                    mMessageAdapter.notifyDataSetChanged();*/
+                    /*UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
 
-                    /*updateItemAtPosition(lastListViewPosition);*/
+                    for(UserMessage removeMessage: userMessages){
 
-                    /*//remove last item
-                    mMessageListView.removeViewAt(mMessageListView.getLastVisiblePosition());
-                    mMessageAdapter.notifyDataSetChanged();
-*/
-                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    mMessageAdapter.add(userMessage);*/
-
-                    /*runOnUiThread(new Runnable() {
-                        public void run() {
+                        if(userMessagee.equals(removeMessage)){
+                            userMessages.remove(removeMessage);
                             mMessageAdapter.notifyDataSetChanged();
+                            break;
                         }
-                    });*/
+                    }*/
 
-                    /*recreate();
-                    mMessageAdapter.notifyDataSetChanged();*/
+
+
 
                     /////////
                     userMessages.remove(userMessages.size() - 1);
@@ -323,9 +315,6 @@ public class UserToUserMessage extends AppCompatActivity {
                     });
 
                     /////////
-
-
-                    /*mMessageAdapter.notifyDataSetChanged();*/
 
 
                 }

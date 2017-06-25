@@ -53,6 +53,7 @@ public class TotalMessages extends AppCompatActivity {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username);
+        mMessagesDatabaseReferenceSecondName= mFirebaseDatabase.getReference();
 
         // Initialize message ListView and its adapter
         userNameMessages = new ArrayList<>();
@@ -90,11 +91,33 @@ public class TotalMessages extends AppCompatActivity {
                 // Create an AlertDialog.Builder and set the message, and click listeners
                 // for the postivie and negative buttons on the dialog.
                 AlertDialog.Builder builder = new AlertDialog.Builder(TotalMessages.this);
-                builder.setMessage("Delete conversation?");
+                builder.setTitle("Delete Conversation?");
+                builder.setMessage("This action will permanently delete messages for both sender and receiver");
                 builder.setPositiveButton(getResources().getString(R.string.dialogYes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User clicked the "Delete" button, so delete the product.
+
                         mMessagesDatabaseReference.child(text).setValue(null);
+                        mMessagesDatabaseReferenceSecondName.child(text).child(UserDetails.username).setValue(null);
+
+                        /*AlertDialog.Builder builder2 = new AlertDialog.Builder(TotalMessages.this);
+                        builder2.setMessage("Are you sure???");
+                        builder2.setPositiveButton(getResources().getString(R.string.dialogYes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // User clicked the "Delete" button, so delete the product.
+
+                            }
+                        });
+
+                        builder2.setNegativeButton(getResources().getString(R.string.dialogCancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (dialogInterface != null) {
+                                    dialogInterface.dismiss();
+                                }
+                            }
+                        });*/
+
                     }
                 });
                 builder.setNegativeButton(getResources().getString(R.string.dialogCancel), new DialogInterface.OnClickListener() {
@@ -111,6 +134,7 @@ public class TotalMessages extends AppCompatActivity {
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 
+                //return true so onClick doesnt fire onClick of onItemSelectedListener
                 return true;
             }
         });

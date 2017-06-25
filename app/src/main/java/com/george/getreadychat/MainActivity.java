@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
@@ -24,10 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.george.getreadychat.data.UserDetails;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,13 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private String mUsername;
 
 
-
     private FirebaseDatabase mFirebaseDatabase;
 
     //A class that reference to spesific part of database
     private DatabaseReference mMessagesDatabaseReference;
     private DatabaseReference mNumberOfMessages;
-
 
 
     private ValueEventListener mValueEventListener;
@@ -80,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(MainActivity.this, "MainOnCreate", Toast.LENGTH_SHORT).show();
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         // Get details on the currently active default data
