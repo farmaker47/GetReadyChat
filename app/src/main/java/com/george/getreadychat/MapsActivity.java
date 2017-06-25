@@ -54,8 +54,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng sydney = new LatLng(40.8696, 22.91);
         sydneyy = mMap.addMarker(new MarkerOptions()
                 .position(sydney)
-                .title("Mandres")
-                .snippet("Farmaker")
+                .title("Φαρμακείο")
+                .snippet("Γεώργιου Σολούπη")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
 

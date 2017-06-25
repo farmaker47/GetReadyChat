@@ -1,16 +1,15 @@
 package com.george.getreadychat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.george.getreadychat.data.UserDetails;
 import com.google.firebase.database.ChildEventListener;
@@ -41,6 +40,8 @@ public class TotalMessages extends AppCompatActivity {
     //Value event listener
     private ValueEventListener mValueEventListener;
 
+    private List<String> userNameMessages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +55,7 @@ public class TotalMessages extends AppCompatActivity {
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username);
 
         // Initialize message ListView and its adapter
-        List<String> userNameMessages = new ArrayList<>();
+        userNameMessages = new ArrayList<>();
         mMessageAdapter = new TotalMessagesAdapter(this, R.layout.item_all_message, userNameMessages);
         mMessageListView.setAdapter(mMessageAdapter);
 
@@ -72,58 +73,45 @@ public class TotalMessages extends AppCompatActivity {
                 /*mMessagesDatabaseReference2 = mFirebaseDatabase.getReference().child(strUsername).child(text);*/
                 UserDetails.secondUser = text;
 
-/*
-                /////
-                ////////
-                if (mChildEventListener2 == null) {
-                    // Child event listener
-                    mChildEventListener2 = new ChildEventListener() {
-
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                   *//* UserNameMessage usersMessage = dataSnapshot.getValue(UserNameMessage.class);
-                    String datasnapshoti = dataSnapshot.getKey();
-                    Log.e("datasnapsotAllMessages",datasnapshoti);
-                    mMessageAdapter.add(usersMessage);*//*
-
-
-                            string2 = dataSnapshot.getKey();
-                            Log.e("454545", string2);
-
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    };
-
-                    mMessagesDatabaseReference2.addChildEventListener(mChildEventListener2);
-
-
-                }
-
-                mChildEventListener2 =null;*/
-
                 Intent a = new Intent(TotalMessages.this, UserToUserMessage.class);
                 startActivity(a);
 
+
+            }
+        });
+
+        mMessageListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(final AdapterView<?> adapterView, final View view, final int position, long l) {
+
+                TextView textView = (TextView) view.findViewById(R.id.allMessageTextView);
+                final String text = textView.getText().toString();
+
+                // Create an AlertDialog.Builder and set the message, and click listeners
+                // for the postivie and negative buttons on the dialog.
+                AlertDialog.Builder builder = new AlertDialog.Builder(TotalMessages.this);
+                builder.setMessage("Delete conversation?");
+                builder.setPositiveButton(getResources().getString(R.string.dialogYes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked the "Delete" button, so delete the product.
+                        mMessagesDatabaseReference.child(text).setValue(null);
+                    }
+                });
+                builder.setNegativeButton(getResources().getString(R.string.dialogCancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked the "Cancel" button, so dismiss the dialog
+                        // and continue editing the product.
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                // Create and show the AlertDialog
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                return true;
             }
         });
     }
@@ -144,16 +132,29 @@ public class TotalMessages extends AppCompatActivity {
 
                     String datasnapshoti = dataSnapshot.getKey();
                     Log.e("datasnapsotAllMessages", datasnapshoti);
-                    mMessageAdapter.add(datasnapshoti);
+                    userNameMessages.add(datasnapshoti);
+                    mMessageAdapter.notifyDataSetChanged();
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                    mMessageAdapter.notifyDataSetChanged();
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    String datasnapshoti = dataSnapshot.getKey();
+
+                    for(String removedString : userNameMessages){
+
+                        if(datasnapshoti.equals(removedString)){
+                            userNameMessages.remove(removedString);
+                            mMessageAdapter.notifyDataSetInvalidated();
+                            break;
+                        }
+                    }
+
 
                 }
 
