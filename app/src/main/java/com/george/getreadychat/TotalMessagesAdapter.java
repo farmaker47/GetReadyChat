@@ -10,18 +10,25 @@ import android.widget.TextView;
 
 import com.george.getreadychat.data.UserDetails;
 
+import java.security.Key;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.R.attr.key;
+import static android.R.attr.value;
 
 
-public class TotalMessagesAdapter extends ArrayAdapter<String> {
+public class TotalMessagesAdapter extends ArrayAdapter<Totalmessage> {
 
-    private List<String> userNameMessages;
+    private List<Totalmessage> userNameMessages;
     private Context context;
 
-    public TotalMessagesAdapter(Context context, int resource, List<String> userNameMessages) {
+    public TotalMessagesAdapter(Context context, int resource, List<Totalmessage> userNameMessages) {
         super(context, resource, userNameMessages);
         this.context = context;
         this.userNameMessages = userNameMessages;
+
     }
 
     @NonNull
@@ -34,11 +41,12 @@ public class TotalMessagesAdapter extends ArrayAdapter<String> {
         TextView messageTextView = (TextView) convertView.findViewById(R.id.allMessageTextView);
         TextView dummyTextView = (TextView) convertView.findViewById(R.id.allNameTextView);
         TextView numberTextView = (TextView) convertView.findViewById(R.id.allNumberTextView);
+        dummyTextView.setVisibility(View.INVISIBLE);
 
-        String s= getItem(position);
+        Totalmessage totalmessage= getItem(position);
 
-        dummyTextView.setText("User Messages");
-        messageTextView.setText(s);
+        dummyTextView.setText(totalmessage.getFirstEntry());
+        messageTextView.setText(totalmessage.getSecondEnrty());
 
         String numberOfMessages = String.valueOf(UserDetails.numberOfMessages);
         numberTextView.setText(numberOfMessages);

@@ -20,7 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TotalMessages extends AppCompatActivity {
 
@@ -40,7 +42,8 @@ public class TotalMessages extends AppCompatActivity {
     //Value event listener
     private ValueEventListener mValueEventListener;
 
-    private List<String> userNameMessages;
+    private List<Totalmessage> userNameMessages;
+    private HashMap<String,String> doubleString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class TotalMessages extends AppCompatActivity {
         mMessageListView = (ListView) findViewById(R.id.allMessageListView);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username);
+        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username).child(UserDetails.usernameID);
         mMessagesDatabaseReferenceSecondName= mFirebaseDatabase.getReference();
 
         // Initialize message ListView and its adapter
@@ -70,9 +73,13 @@ public class TotalMessages extends AppCompatActivity {
 
                 TextView textView = (TextView) view.findViewById(R.id.allMessageTextView);
                 String text = textView.getText().toString();
+                TextView textViewDummy = (TextView) view.findViewById(R.id.allNameTextView);
+                String dummy = textViewDummy.getText().toString();
+
 
                 /*mMessagesDatabaseReference2 = mFirebaseDatabase.getReference().child(strUsername).child(text);*/
                 UserDetails.secondUser = text;
+                UserDetails.secondUserID = dummy;
 
                 Intent a = new Intent(TotalMessages.this, UserToUserMessage.class);
                 startActivity(a);
@@ -87,6 +94,8 @@ public class TotalMessages extends AppCompatActivity {
 
                 TextView textView = (TextView) view.findViewById(R.id.allMessageTextView);
                 final String text = textView.getText().toString();
+                TextView textViewKY = (TextView)view.findViewById(R.id.allNameTextView);
+                final String textKY = textViewKY.getText().toString();
 
                 // Create an AlertDialog.Builder and set the message, and click listeners
                 // for the postivie and negative buttons on the dialog.
@@ -97,7 +106,8 @@ public class TotalMessages extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         mMessagesDatabaseReference.child(text).setValue(null);
-                        mMessagesDatabaseReferenceSecondName.child(text).child(UserDetails.username).setValue(null);
+                        mMessagesDatabaseReferenceSecondName.child(text).child(textKY).child(UserDetails.username).setValue(null);
+                        recreate();
 
                         /*AlertDialog.Builder builder2 = new AlertDialog.Builder(TotalMessages.this);
                         builder2.setMessage("Are you sure???");
@@ -152,12 +162,24 @@ public class TotalMessages extends AppCompatActivity {
                     String datasnapshoti = dataSnapshot.getKey();
                     Log.e("datasnapsotAllMessages",datasnapshoti);
                     mMessageAdapter.add(usersMessage);*/
+                    for(DataSnapshot secondSnap : dataSnapshot.getChildren()){
+                        String secondData = secondSnap.getKey();
+                        Log.e("secondData", secondData);
 
+                        String datasnapshoti = dataSnapshot.getKey();
+                        Log.e("firstData", datasnapshoti);
+/*
+                        doubleString = new HashMap<>();
+                        doubleString.put(secondData,datasnapshoti);*/
+                        userNameMessages.add(new Totalmessage(secondData,datasnapshoti));
+                        mMessageAdapter.notifyDataSetChanged();
+                    }
 
+/*
                     String datasnapshoti = dataSnapshot.getKey();
-                    Log.e("datasnapsotAllMessages", datasnapshoti);
-                    userNameMessages.add(datasnapshoti);
-                    mMessageAdapter.notifyDataSetChanged();
+                    Log.e("datasnapsotAllMessages", datasnapshoti);*/
+
+
                 }
 
                 @Override
@@ -167,17 +189,19 @@ public class TotalMessages extends AppCompatActivity {
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    recreate();
 
-                    String datasnapshoti = dataSnapshot.getKey();
+                    /*Totalmessage datasnapshoti = dataSnapshot.getValue(Totalmessage.class);
 
-                    for(String removedString : userNameMessages){
+                    userNameMessages.remove(datasnapshoti);
+                    mMessageAdapter.notifyDataSetInvalidated();
+
+                    for(Totalmessage removedString : userNameMessages){
 
                         if(datasnapshoti.equals(removedString)){
-                            userNameMessages.remove(removedString);
-                            mMessageAdapter.notifyDataSetInvalidated();
                             break;
                         }
-                    }
+                    }*/
 
 
                 }

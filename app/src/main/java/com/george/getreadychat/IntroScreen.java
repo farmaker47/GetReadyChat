@@ -63,7 +63,8 @@ public class IntroScreen extends AppCompatActivity {
                 if (user != null) {
 
                     //Method toodo onSingnedIn with the name of the user
-                    onSignedInInitialize(user.getDisplayName());
+                    onSignedInInitialize(user.getDisplayName(),user.getUid());
+
 
                 } else {
 
@@ -114,11 +115,12 @@ public class IntroScreen extends AppCompatActivity {
         }
     }
 
-    private void onSignedInInitialize(String username) {
+    private void onSignedInInitialize(String username,String usernameId) {
         mUsername = username;
 
         UserDetails.username = username;
-        Log.e("usernameInDetails", UserDetails.username);
+        UserDetails.usernameID = usernameId;
+        Log.e("usernameInDetails", UserDetails.username+UserDetails.usernameID);
 
     }
 

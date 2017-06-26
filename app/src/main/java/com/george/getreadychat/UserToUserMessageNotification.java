@@ -86,8 +86,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         Intent intent = getIntent();
         UserDetails.UserChatsWith = intent.getStringExtra("chatsWith");
+        UserDetails.UserChatsWithID = intent.getStringExtra("chatsWithID");
         /*String ad = intent.getStringExtra("title");*/
-        Log.e("UserChatsWith", UserDetails.UserChatsWith);
+        Log.e("UserChatsWith", UserDetails.UserChatsWith+UserDetails.UserChatsWithID);
 
 
         /*Toast.makeText(this,"Second User= " + UserDetails.secondUser,Toast.LENGTH_LONG).show();*/
@@ -99,8 +100,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
 
         //making the references
-        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username);
-        mMessagesDatabaseReferenceSecondName = mFirebaseDatabase.getReference().child(UserDetails.UserChatsWith);
+        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username).child(UserDetails.usernameID).child(UserDetails.UserChatsWith).child(UserDetails.UserChatsWithID);
+        mMessagesDatabaseReferenceSecondName = mFirebaseDatabase.getReference().child(UserDetails.UserChatsWith).child(UserDetails.UserChatsWithID).child(UserDetails.username).child(UserDetails.usernameID);
 
         //making the reference for the storage
         mChatPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
@@ -161,14 +162,14 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             public void onClick(View view) {
 
                 //Creating a message
-                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds());
+                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
-                mMessagesDatabaseReference.child(UserDetails.UserChatsWith).push().setValue(userMessage);
+                mMessagesDatabaseReference.push().setValue(userMessage);
 
 
-                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds());
+                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
-                mMessagesDatabaseReferenceSecondName.child(UserDetails.username).push().setValue(userMessage2);
+                mMessagesDatabaseReferenceSecondName.push().setValue(userMessage2);
 
 
                 // Clear input box
@@ -204,12 +205,12 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds());
-                    mMessagesDatabaseReference.child(UserDetails.UserChatsWith).push().setValue(userMessage);
+                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(),UserDetails.usernameID);
+                    mMessagesDatabaseReference.push().setValue(userMessage);
 
-                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds());
+                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
                     //The push method is exactly what you want to be using in this case because you need a new id generated for each message
-                    mMessagesDatabaseReferenceSecondName.child(UserDetails.username).push().setValue(userMessage2);
+                    mMessagesDatabaseReferenceSecondName.push().setValue(userMessage2);
 
                 }
             });
@@ -229,9 +230,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
 
                     String datasnapshoti = dataSnapshot.getKey();
-                    mMessagesDatabaseReference.child(UserDetails.UserChatsWith).child(datasnapshoti).child("isReaded").setValue("true");
+                    mMessagesDatabaseReference.child(datasnapshoti).child("isReaded").setValue("true");
 
-                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.username).getKey();
+                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.getKey();
                     Log.e("datasnapsot", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
                     mMessageAdapter.notifyDataSetChanged();
@@ -262,7 +263,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 }
             };
 
-            mMessagesDatabaseReference.child(UserDetails.UserChatsWith).addChildEventListener(mDeliveryChildEventListener);
+            mMessagesDatabaseReference.addChildEventListener(mDeliveryChildEventListener);
         }
 
     }
@@ -288,7 +289,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                     mMessageAdapter.notifyDataSetChanged();
 
                     String datasnapshoti = dataSnapshot.getKey();
-                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.username).getKey();
+                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.getKey();
                     Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
 
@@ -360,7 +361,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 }
             };
 
-            mMessagesDatabaseReferenceSecondName.child(UserDetails.username).addChildEventListener(mChildEventListener);
+            mMessagesDatabaseReferenceSecondName.addChildEventListener(mChildEventListener);
         }
     }
 
@@ -386,8 +387,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     @Override
     protected void onPause() {
 
-        mMessagesDatabaseReference.child(UserDetails.UserChatsWith).removeEventListener(mDeliveryChildEventListener);
-        mMessagesDatabaseReferenceSecondName.child(UserDetails.username).removeEventListener(mChildEventListener);
+        mMessagesDatabaseReference.removeEventListener(mDeliveryChildEventListener);
+        mMessagesDatabaseReferenceSecondName.removeEventListener(mChildEventListener);
         mChildEventListener = null;
         mDeliveryChildEventListener = null;
 
@@ -400,8 +401,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     protected void onStop() {
 
         if (mChildEventListener != null) {
-            mMessagesDatabaseReference.child(UserDetails.UserChatsWith).removeEventListener(mDeliveryChildEventListener);
-            mMessagesDatabaseReferenceSecondName.child(UserDetails.username).removeEventListener(mChildEventListener);
+            mMessagesDatabaseReference.removeEventListener(mDeliveryChildEventListener);
+            mMessagesDatabaseReferenceSecondName.removeEventListener(mChildEventListener);
             mChildEventListener = null;
             mDeliveryChildEventListener = null;
         }

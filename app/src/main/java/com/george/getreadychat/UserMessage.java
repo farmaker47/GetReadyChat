@@ -24,11 +24,12 @@ public class UserMessage {
     private String time;
     private String isReaded;
     private long timeStamp;
+    private String nameId;
 
     public UserMessage() {
     }
 
-    public UserMessage(String text, String name, String nameToName, String photoUrl, String time, String isreaded,long timestamp) {
+    public UserMessage(String text, String name, String nameToName, String photoUrl, String time, String isreaded,long timestamp,String nameId) {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;
@@ -36,6 +37,7 @@ public class UserMessage {
         this.time = time;
         this.isReaded = isreaded;
         this.timeStamp = timestamp;
+        this.nameId = nameId;
 
     }
 
@@ -92,5 +94,13 @@ public class UserMessage {
     }
     public void setTimeStamp(long timestamp){
         this.timeStamp = timestamp;
+    }
+
+    public String getNameId(){
+        return nameId;
+    }
+
+    public void setNameId(String nameId){
+        this.nameId = nameId;
     }
 }

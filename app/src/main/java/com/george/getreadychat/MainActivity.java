@@ -139,7 +139,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
                 UserDetails.secondUser = "george soloupis";
+                UserDetails.secondUserID = "rZf3W3y9RuOQ26kyq3CiVKtyUnK2";
+
 
                 Intent intentToUserMessage = new Intent(MainActivity.this, UserToUserMessage.class);
                 startActivity(intentToUserMessage);
@@ -152,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 UserDetails.secondUser = "Maria Vakalopoulou";
+                UserDetails.secondUserID = "7h2tpqbXk7cx1SAFq599kmTc8Yy1";
 
                 Intent intentToUserMessage = new Intent(MainActivity.this, UserToUserMessage.class);
                 startActivity(intentToUserMessage);
@@ -281,63 +285,31 @@ public class MainActivity extends AppCompatActivity {
                     }*/
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        /*Toast.makeText(MainActivity.this, postSnapshot.getKey(), Toast.LENGTH_SHORT).show();*/
-                        queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("timeStamp").limitToLast(1);
-                        /*queryChildrenCount = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("isReaded").equalTo("false");*/
+                        for(DataSnapshot secPostsnapshot : postSnapshot.getChildren()){
+                            for(DataSnapshot thirdPostSnapsot : secPostsnapshot.getChildren()){
 
 
-                        mNumberOfMessages = mMessagesDatabaseReference.child(postSnapshot.getKey());
-                        if (mChildEventListener == null) {
-                            mChildEventListener = new ChildEventListener() {
-                                @Override
-                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                    UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                                    String falseCount = userMessage.getIsReaded();
-                                    if (falseCount.equals("false")) {
-                                        UserDetails.numberOfMessages = UserDetails.numberOfMessages + 1;
-                                    }
-                                }
+                                queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey())
+                                        .child(secPostsnapshot.getKey())
+                                        .child(thirdPostSnapsot.getKey())
+                                        .orderByChild("timeStamp").limitToLast(1);
+                                Log.e("minima",mMessagesDatabaseReference.child(UserDetails.usernameID).child(postSnapshot.getKey())
+                                        .child(secPostsnapshot.getKey())
+                                        .child(thirdPostSnapsot.getKey()).toString());
 
-                                @Override
-                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                                queryTimestamp.addChildEventListener(new ChildEventListener() {
+                                    @Override
+                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                        UserMessage usermessageOfLast = dataSnapshot.getValue(UserMessage.class);
 
-                                }
-
-                                @Override
-                                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                }
-
-                                @Override
-                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            };
-                            mNumberOfMessages.addChildEventListener(mChildEventListener);
-                        }
-
-                        /*UserDetails.secondUser = postSnapshot.getKey();*/
-                        Log.e("MainActivitySecond", UserDetails.secondUser);
-
-
-                        queryTimestamp.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                UserMessage usermessageOfLast = dataSnapshot.getValue(UserMessage.class);
-
-                                String stringText = usermessageOfLast.getText();
-                                String stringName = usermessageOfLast.getName();
-                                String stringIsReaded = usermessageOfLast.getIsReaded();
+                                        String stringText = usermessageOfLast.getText();
+                                        String stringName = usermessageOfLast.getName();
+                                        String stringIsReaded = usermessageOfLast.getIsReaded();
 
                                 /*Toast.makeText(MainActivity.this, stringText, Toast.LENGTH_SHORT).show();*/
 
-                                UserToUserMessage userForCheckActive = null;
-                                UserToUserMessageNotification userForCheckNotificationActive = null;
+                                        UserToUserMessage userForCheckActive = null;
+                                        UserToUserMessageNotification userForCheckNotificationActive = null;
 
                                 /*//giving the notifications different id
                                 long notifyTimeStamp = usermessageOfLast.getTimeStamp();
@@ -345,124 +317,180 @@ public class MainActivity extends AppCompatActivity {
                                 String timi = time.substring(9);
                                 int notifyID = Integer.parseInt(timi);*/
 
-                                int notifyID = 1;
+                                        int notifyID = 1;
 
 
-                                if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") &&
-                                        !userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification) {
+                                        if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") &&
+                                                !userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification) {
 
-                                    String tagStringForNotification = usermessageOfLast.getName();
+                                            String tagStringForNotification = usermessageOfLast.getName();
+                                            String tagStringForID = usermessageOfLast.getNameId();
 
                                     /*userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification||
                                             !userForCheckActive.isActive && userForCheckNotificationActive.isActiveNotification*/
-                                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-                                            .setSmallIcon(R.drawable.ic_launcher)
-                                            .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
-                                            .setContentText(usermessageOfLast.getText())
-                                            .setOnlyAlertOnce(true)
-                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                                    mBuilder.setAutoCancel(true);
-                                    mBuilder.setLocalOnly(false);
+                                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                                    .setSmallIcon(R.drawable.ic_launcher)
+                                                    .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
+                                                    .setContentText(usermessageOfLast.getText())
+                                                    .setOnlyAlertOnce(true)
+                                                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                                            mBuilder.setAutoCancel(true);
+                                            mBuilder.setLocalOnly(false);
 
-                                    Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
-                                    resultIntent.putExtra("chatsWith", tagStringForNotification);
+                                            Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
+                                            resultIntent.putExtra("chatsWith", tagStringForNotification);
+                                            resultIntent.putExtra("chatsWithID", tagStringForID);
                                     /*resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
 
-                                    resultIntent.setAction(Long.toString(System.currentTimeMillis()));
+                                            resultIntent.setAction(Long.toString(System.currentTimeMillis()));
 
 
-                                    //flag to upddate current or create new one
-                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                            //flag to upddate current or create new one
+                                            PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                    //building the notification
-                                    mBuilder.setContentIntent(resultPendingIntent);
+                                            //building the notification
+                                            mBuilder.setContentIntent(resultPendingIntent);
 
-                                    //use tag string to update current
-                                    mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
+                                            //use tag string to update current
+                                            mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
 
-                                } else if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") &&
-                                        !userForCheckNotificationActive.isActiveNotification && userForCheckActive.isActive && !stringName.equals(UserDetails.secondUser)) {
+                                        } else if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") &&
+                                                !userForCheckNotificationActive.isActiveNotification && userForCheckActive.isActive && !stringName.equals(UserDetails.secondUser)) {
 
-                                    String tagStringForNotification = usermessageOfLast.getName();
+                                            String tagStringForNotification = usermessageOfLast.getName();
+                                            String tagStringForID = usermessageOfLast.getNameId();
 
-                                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-                                            .setSmallIcon(R.drawable.ic_launcher)
-                                            .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
-                                            .setContentText(usermessageOfLast.getText())
-                                            .setOnlyAlertOnce(true)
-                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                                    mBuilder.setAutoCancel(true);
-                                    mBuilder.setLocalOnly(false);
+                                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                                    .setSmallIcon(R.drawable.ic_launcher)
+                                                    .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
+                                                    .setContentText(usermessageOfLast.getText())
+                                                    .setOnlyAlertOnce(true)
+                                                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                                            mBuilder.setAutoCancel(true);
+                                            mBuilder.setLocalOnly(false);
 
-                                    Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
-                                    resultIntent.putExtra("chatsWith", tagStringForNotification);
+                                            Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
+                                            resultIntent.putExtra("chatsWith", tagStringForNotification);
+                                            resultIntent.putExtra("chatsWithID", tagStringForID);
 
-                                    resultIntent.setAction(Long.toString(System.currentTimeMillis()));
+                                            resultIntent.setAction(Long.toString(System.currentTimeMillis()));
 
-                                    //flag to upddate current or create new one
-                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                            //flag to upddate current or create new one
+                                            PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                    //building the notification
-                                    mBuilder.setContentIntent(resultPendingIntent);
+                                            //building the notification
+                                            mBuilder.setContentIntent(resultPendingIntent);
 
-                                    mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
+                                            mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
 
-                                } else if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") && !userForCheckActive.isActive &&
-                                        userForCheckNotificationActive.isActiveNotification && !stringName.equals(UserDetails.UserChatsWith)) {
+                                        } else if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") && !userForCheckActive.isActive &&
+                                                userForCheckNotificationActive.isActiveNotification && !stringName.equals(UserDetails.UserChatsWith)) {
 
-                                    String tagStringForNotification = usermessageOfLast.getName();
+                                            String tagStringForNotification = usermessageOfLast.getName();
+                                            String tagStringForID = usermessageOfLast.getNameId();
 
-                                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-                                            .setSmallIcon(R.drawable.ic_launcher)
-                                            .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
-                                            .setContentText(usermessageOfLast.getText())
-                                            .setOnlyAlertOnce(true)
-                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                                    mBuilder.setAutoCancel(true);
-                                    mBuilder.setLocalOnly(false);
+                                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                                    .setSmallIcon(R.drawable.ic_launcher)
+                                                    .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
+                                                    .setContentText(usermessageOfLast.getText())
+                                                    .setOnlyAlertOnce(true)
+                                                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                                            mBuilder.setAutoCancel(true);
+                                            mBuilder.setLocalOnly(false);
 
-                                    Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
-                                    resultIntent.putExtra("chatsWith", tagStringForNotification);
+                                            Intent resultIntent = new Intent(MainActivity.this, UserToUserMessageNotification.class);
+                                            resultIntent.putExtra("chatsWith", tagStringForNotification);
+                                            resultIntent.putExtra("chatsWithID", tagStringForID);
 
-                                    resultIntent.setAction(Long.toString(System.currentTimeMillis()));
+                                            resultIntent.setAction(Long.toString(System.currentTimeMillis()));
 
-                                    //flag to upddate current or create new one
-                                    PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                            //flag to upddate current or create new one
+                                            PendingIntent resultPendingIntent = PendingIntent.getActivity(MainActivity.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                    //building the notification
-                                    mBuilder.setContentIntent(resultPendingIntent);
+                                            //building the notification
+                                            mBuilder.setContentIntent(resultPendingIntent);
 
-                                    mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
+                                            mNotificationManager.notify(tagStringForNotification, notifyID, mBuilder.build());
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                                mNumberOfMessages = mMessagesDatabaseReference.child(UserDetails.usernameID).child(postSnapshot.getKey()).child(secPostsnapshot.getKey());
+                                if (mChildEventListener == null) {
+                                    mChildEventListener = new ChildEventListener() {
+                                        @Override
+                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                            UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
+                                            String falseCount = userMessage.getIsReaded();
+                                            if (falseCount.equals("false")) {
+                                                UserDetails.numberOfMessages = UserDetails.numberOfMessages + 1;
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    };
+                                    mNumberOfMessages.addChildEventListener(mChildEventListener);
                                 }
-
                             }
 
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        }
+                        /*Toast.makeText(MainActivity.this, postSnapshot.getKey(), Toast.LENGTH_SHORT).show();*/
 
-                            }
+                        /*queryChildrenCount = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("isReaded").equalTo("false");*/
 
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                            }
 
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                            }
+                        /*UserDetails.secondUser = postSnapshot.getKey();*/
+                        Log.e("MainActivitySecond", UserDetails.secondUser);
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+
 
                     }
 

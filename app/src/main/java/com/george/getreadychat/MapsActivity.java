@@ -67,6 +67,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent intent = new Intent(MapsActivity.this, UserToUserMessage.class);
                 startActivity(intent);
                 UserDetails.secondUser = "george soloupis";
+                UserDetails.secondUserID= "rZf3W3y9RuOQ26kyq3CiVKtyUnK2";
             }
         });
     }
