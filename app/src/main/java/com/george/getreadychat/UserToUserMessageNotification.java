@@ -1,6 +1,9 @@
 package com.george.getreadychat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
@@ -161,6 +164,14 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                // Get details on the currently active default data
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                // If there is a network connection, fetch data
+                if (networkInfo == null) {
+                    Toast.makeText(UserToUserMessageNotification.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+                }
+
                 //Creating a message
                 UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
@@ -203,6 +214,15 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             photoRef.putFile(selectedImageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    // Get details on the currently active default data
+                    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                    // If there is a network connection, fetch data
+                    if (networkInfo == null) {
+                        Toast.makeText(UserToUserMessageNotification.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+                    }
+
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                     UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(),UserDetails.usernameID);

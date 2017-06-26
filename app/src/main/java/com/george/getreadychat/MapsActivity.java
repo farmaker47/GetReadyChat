@@ -67,7 +67,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // If there is a network connection, fetch data
         if (networkInfo == null) {
             Toast.makeText(MapsActivity.this, "No internet access!!", Toast.LENGTH_SHORT).show();
-            finish();
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

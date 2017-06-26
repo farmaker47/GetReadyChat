@@ -3,6 +3,8 @@ package com.george.getreadychat;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -51,7 +53,7 @@ public class UserToUserMessage extends AppCompatActivity {
     private int lastListViewPosition;
 
     private ListView mMessageListView;
-    private UserMessageAdapter mMessageAdapter;
+    private UserMessageAdapterBubbles mMessageAdapter;
     private ProgressBar mProgressBar;
     private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
@@ -106,7 +108,7 @@ public class UserToUserMessage extends AppCompatActivity {
 
         // Initialize message ListView and its adapter
         userMessages = new ArrayList<>();
-        mMessageAdapter = new UserMessageAdapter(this, R.layout.item_message, userMessages);
+        mMessageAdapter = new UserMessageAdapterBubbles(this, R.layout.item_message, userMessages);
         mMessageListView.setAdapter(mMessageAdapter);
 
         mMessageListView.setEmptyView(emptyLinearLayout);
@@ -151,6 +153,14 @@ public class UserToUserMessage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                // Get details on the currently active default data
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                // If there is a network connection, fetch data
+                if (networkInfo == null) {
+                    Toast.makeText(UserToUserMessage.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+                }
+
                 //Creating a message
                 UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
@@ -192,6 +202,15 @@ public class UserToUserMessage extends AppCompatActivity {
             photoRef.putFile(selectedImageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    // Get details on the currently active default data
+                    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                    // If there is a network connection, fetch data
+                    if (networkInfo == null) {
+                        Toast.makeText(UserToUserMessage.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+                    }
+
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                     UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(),UserDetails.usernameID);
@@ -438,7 +457,7 @@ public class UserToUserMessage extends AppCompatActivity {
             List<UserMessage> userMessages = new ArrayList<>();
             userMessages.add(taskTitle);
 
-            mMessageAdapter = new UserMessageAdapter(this, R.layout.item_message, userMessages);
+            mMessageAdapter = new UserMessageAdapterBubbles(this, R.layout.item_message, userMessages);
 
             mMessageListView.setAdapter(mMessageAdapter);
            /* recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, allTask);
