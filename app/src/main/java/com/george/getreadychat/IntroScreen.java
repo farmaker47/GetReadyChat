@@ -82,7 +82,7 @@ public class IntroScreen extends AppCompatActivity {
         mIntroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent a = new Intent(IntroScreen.this,MainActivity.class);
+                Intent a = new Intent(IntroScreen.this,MapsActivity.class);
                 startActivity(a);
             }
         });
