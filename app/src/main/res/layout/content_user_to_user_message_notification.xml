@@ -11,6 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.george.getreadychat.UserToUserMessageNotification"
-    tools:showIn="@layout/activity_user_to_user_message_notification">
+    tools:showIn="@layout/activity_user_to_user_message_notification"
+    android:background="@drawable/chatback">
 
 </RelativeLayout>

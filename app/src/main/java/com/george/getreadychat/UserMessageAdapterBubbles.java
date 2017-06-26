@@ -42,9 +42,9 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
         int viewType = getItemViewType(position);
 
         if (message.getName().equals(UserDetails.username)) {
-            layoutResource = R.layout.item_message_left;
-        } else {
             layoutResource = R.layout.item_message_right;
+        } else {
+            layoutResource = R.layout.item_message_left;
         }
 
         if (convertView != null) {

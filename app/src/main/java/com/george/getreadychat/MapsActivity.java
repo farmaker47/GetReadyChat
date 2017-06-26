@@ -118,7 +118,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .position(farmakeioMV)
                 .title("Φαρμακείο")
                 .snippet("Μαρία Βακαλοπούλου")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pharm)));
 
         id = farmakeioMariaVakalopoulou.getId();
         markerMap.put(id, ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME);

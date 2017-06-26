@@ -53,7 +53,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     private int lastListViewPosition;
 
     private ListView mMessageListView;
-    private UserMessageAdapter mMessageAdapter;
+    private UserMessageAdapterBubbles mMessageAdapter;
     private ProgressBar mProgressBar;
     private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
@@ -119,7 +119,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         // Initialize message ListView and its adapter
         userMessages = new ArrayList<>();
-        mMessageAdapter = new UserMessageAdapter(this, R.layout.item_message, userMessages);
+        mMessageAdapter = new UserMessageAdapterBubbles(this, R.layout.item_message, userMessages);
         mMessageListView.setAdapter(mMessageAdapter);
 
         mMessageListView.setEmptyView(emptyLinearLayout);
