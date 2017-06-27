@@ -3,14 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-<!--
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/chatback"
-        android:scaleType="fitXY"/>-->
+
+
+    <!--
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/chatback"
+            android:scaleType="fitXY"/>-->
 
     <LinearLayout
+        android:id="@+id/linearData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -19,32 +22,38 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <ImageView
-            android:id="@+id/photoImageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true" />
-
         <TextView
             android:id="@+id/messageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_weight="0"
             android:maxWidth="200dp"
-            android:minWidth="100dp"
+            android:minWidth="200dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             tools:text="Message" />
+
+        <ImageView
+            android:id="@+id/photoImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/nameTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minWidth="100dp"
+                android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:text="Name" />
 
@@ -54,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:minWidth="100dp"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:text="Name" />
@@ -62,18 +72,13 @@
                 android:id="@+id/isReadTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:text="Readed" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/nameToNameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            tools:text="NameToName" />
     </LinearLayout>
 
 

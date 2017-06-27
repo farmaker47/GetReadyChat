@@ -50,7 +50,8 @@
         android:divider="@android:color/transparent"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
-        tools:listitem="@layout/item_message" />
+        tools:listitem="@layout/item_message"
+        android:dividerHeight="10dp"/>
 
 
     <LinearLayout
