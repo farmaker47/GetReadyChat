@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -59,6 +60,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     private EditText mMessageEditText;
     private Button mSendButton;
     private LinearLayout emptyLinearLayout;
+    private FrameLayout mFrameLayout;
 
     private List<UserMessage> userMessages;
 
@@ -116,6 +118,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mSendButton = (Button) findViewById(R.id.sendButton);
         emptyLinearLayout = (LinearLayout) findViewById(R.id.emptyLinearLayout);
+        mFrameLayout = (FrameLayout)findViewById(R.id.frameLayout);
+        mFrameLayout.setBackgroundResource(R.drawable.round2);
 
         // Initialize message ListView and its adapter
         userMessages = new ArrayList<>();
@@ -148,8 +152,10 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() > 0) {
                     mSendButton.setEnabled(true);
+                    mFrameLayout.setBackgroundResource(R.drawable.round3);
                 } else {
                     mSendButton.setEnabled(false);
+                    mFrameLayout.setBackgroundResource(R.drawable.round2);
                 }
             }
 

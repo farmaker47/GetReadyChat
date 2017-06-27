@@ -48,7 +48,7 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
                 View v = convertView;
                 if(v == null){
                     LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                    v = inflater.inflate(R.layout.item_message_left, parent, false);
+                    v = inflater.inflate(R.layout.item_message_right, parent, false);
                     holder1 = new ViewHolder(v);
                     v.setTag(holder1);
                 }else {
@@ -97,7 +97,7 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
                 View vv = convertView;
                 if(vv == null){
                     LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                    vv = inflater.inflate(R.layout.item_message_right, parent, false);
+                    vv = inflater.inflate(R.layout.item_message_left, parent, false);
                     holder2 = new ViewHolder(vv);
                     vv.setTag(holder2);
                 }else {

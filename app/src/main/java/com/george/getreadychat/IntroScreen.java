@@ -74,7 +74,7 @@ public class IntroScreen extends AppCompatActivity {
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
-                                    .setProviders(AuthUI.EMAIL_PROVIDER, AuthUI.GOOGLE_PROVIDER).build(), RC_SIGN_IN);
+                                    .setProviders(AuthUI.GOOGLE_PROVIDER).build(), RC_SIGN_IN);
                 }
             }
         };
