@@ -2,7 +2,6 @@ package com.george.getreadychat;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +14,13 @@ import com.george.getreadychat.data.UserDetails;
 
 import java.util.List;
 
-/**
- * Created by farmaker1 on 26/06/2017.
- */
 
 public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
 
     private Activity activity;
     private List<UserMessage> objects;
+
+    int layoutResource;
 
     public UserMessageAdapterBubbles(Activity context, int resource, List<UserMessage> objects) {
         super(context, resource, objects);
@@ -34,61 +32,115 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder holder;
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-
-        int layoutResource = 0; // determined by view type
         UserMessage message = getItem(position);
-        int viewType = getItemViewType(position);
+        int viewType=getItemViewType(position);
 
-        if (message.getName().equals(UserDetails.username)) {
+
+        /*if (message.getName().equals(UserDetails.username)) {
             layoutResource = R.layout.item_message_right;
         } else {
             layoutResource = R.layout.item_message_left;
+        }*/
+
+        switch (viewType){
+            case 0:
+                ViewHolder holder1;
+                View v = convertView;
+                if(v == null){
+                    LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    v = inflater.inflate(R.layout.item_message_left, parent, false);
+                    holder1 = new ViewHolder(v);
+                    v.setTag(holder1);
+                }else {
+                    holder1 = (ViewHolder) v.getTag();
+                }
+
+
+                boolean isPhoto = message.getPhotoUrl() != null;
+                if (isPhoto) {
+                    holder1.messageTextView.setVisibility(View.GONE);
+                    holder1.photoImageView.setVisibility(View.VISIBLE);
+                    Glide.with(holder1.photoImageView.getContext())
+                            .load(message.getPhotoUrl())
+                            .into(holder1.photoImageView);
+                } else {
+                    holder1.messageTextView.setVisibility(View.VISIBLE);
+                    holder1.photoImageView.setVisibility(View.GONE);
+                    holder1.messageTextView.setText(message.getText());
+                }
+
+                holder1.timeTextView.setText(message.getTime());
+
+
+                if (message.getName().equals(UserDetails.username)) {
+                    holder1.authorTextView.setText(R.string.stringMyName);
+
+                } else {
+                    holder1.authorTextView.setText(message.getName());
+                }
+
+                if (message.getIsReaded().equals("false")) {
+                    holder1.readedTextView.setText("");
+                } else {
+                    holder1.readedTextView.setText(R.string.readed);
+                }
+
+                if (!message.getName().equals(UserDetails.username)) {
+                    holder1.readedTextView.setText("");
+                }
+
+
+                return v;
+
+            case 1:
+                ViewHolder holder2 = null;
+                View vv = convertView;
+                if(vv == null){
+                    LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    vv = inflater.inflate(R.layout.item_message_right, parent, false);
+                    holder2 = new ViewHolder(vv);
+                    vv.setTag(holder2);
+                }else {
+                    holder2 = (ViewHolder) vv.getTag();
+                }
+
+
+                boolean isPhotoo = message.getPhotoUrl() != null;
+                if (isPhotoo) {
+                    holder2.messageTextView.setVisibility(View.GONE);
+                    holder2.photoImageView.setVisibility(View.VISIBLE);
+                    Glide.with(holder2.photoImageView.getContext())
+                            .load(message.getPhotoUrl())
+                            .into(holder2.photoImageView);
+                } else {
+                    holder2.messageTextView.setVisibility(View.VISIBLE);
+                    holder2.photoImageView.setVisibility(View.GONE);
+                    holder2.messageTextView.setText(message.getText());
+                }
+
+                holder2.timeTextView.setText(message.getTime());
+
+
+                if (message.getName().equals(UserDetails.username)) {
+                    holder2.authorTextView.setText(R.string.stringMyName);
+
+                } else {
+                    holder2.authorTextView.setText(message.getName());
+                }
+
+                if (message.getIsReaded().equals("false")) {
+                    holder2.readedTextView.setText("");
+                } else {
+                    holder2.readedTextView.setText(R.string.readed);
+                }
+
+                if (!message.getName().equals(UserDetails.username)) {
+                    holder2.readedTextView.setText("");
+                }
+
+
+                return vv;
         }
-
-        if (convertView != null) {
-            holder = (ViewHolder) convertView.getTag();
-        } else {
-            convertView = inflater.inflate(layoutResource, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        }
-
-        ////////
-        boolean isPhoto = message.getPhotoUrl() != null;
-        if (isPhoto) {
-            holder.messageTextView.setVisibility(View.GONE);
-            holder.photoImageView.setVisibility(View.VISIBLE);
-            Glide.with(holder.photoImageView.getContext())
-                    .load(message.getPhotoUrl())
-                    .into(holder.photoImageView);
-        } else {
-            holder.messageTextView.setVisibility(View.VISIBLE);
-            holder.photoImageView.setVisibility(View.GONE);
-            holder.messageTextView.setText(message.getText());
-        }
-
-        holder.timeTextView.setText(message.getTime());
-        /*nameToNameTextView.setText(message.getNameToName());*/
-
-        if (message.getName().equals(UserDetails.username)) {
-            holder.authorTextView.setText(R.string.stringMyName);
-
-        } else {
-            holder.authorTextView.setText(message.getName());
-        }
-
-        if (message.getIsReaded().equals("false")) {
-            holder.readedTextView.setText("");
-        } else {
-            holder.readedTextView.setText(R.string.readed);
-        }
-
-        if (!message.getName().equals(UserDetails.username)) {
-            holder.readedTextView.setText("");
-        }
-
 
         return convertView;
     }
@@ -103,7 +155,15 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
     @Override
     public int getItemViewType(int position) {
         // return a value between 0 and (getViewTypeCount - 1)
-        return position % 2;
+        UserMessage message = getItem(position);
+
+        if (message.getName().equals(UserDetails.username)) {
+            position = 0;
+        } else {
+            position = 1;
+        }
+
+        return position;
     }
 
     private class ViewHolder {
