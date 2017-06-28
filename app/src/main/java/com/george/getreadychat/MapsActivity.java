@@ -138,6 +138,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     UserDetails.secondUser = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME;
                     UserDetails.secondUserID = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY;
                 }
+
                 if (m.equals(ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME)) {
                     Intent intent = new Intent(MapsActivity.this, UserToUserMessage.class);
                     startActivity(intent);
@@ -385,7 +386,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     }
                                 });
 
-                                mNumberOfMessages = mMessagesDatabaseReference.child(UserDetails.usernameID).child(postSnapshot.getKey()).child(secPostsnapshot.getKey());
+                                queryChildrenCount = mMessagesDatabaseReference.child(postSnapshot.getKey())
+                                        .child(secPostsnapshot.getKey())
+                                        .child(thirdPostSnapsot.getKey())
+                                        .orderByChild("false").limitToLast(1);
                                 if (mChildEventListener == null) {
                                     mChildEventListener = new ChildEventListener() {
                                         @Override
@@ -393,7 +397,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
                                             String falseCount = userMessage.getIsReaded();
                                             if (falseCount.equals("false")) {
-                                                UserDetails.numberOfMessages = UserDetails.numberOfMessages + 1;
+                                                UserDetails.numberOfMessages ++;
                                             }
                                         }
 
@@ -417,7 +421,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                         }
                                     };
-                                    mNumberOfMessages.addChildEventListener(mChildEventListener);
+                                    queryChildrenCount.addChildEventListener(mChildEventListener);
                                 }
                             }
 
