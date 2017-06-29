@@ -82,10 +82,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
     private StatusBarNotification mStatusBarNotification;
 
-    private MediaPlayer mMediaPlayer;
+    private MediaPlayer mMediaPlayer,mMediaPlayer2;
     private int maxVolume;
-    private int currVolume;
-
+    private int currVolume,currVolume2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +137,10 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
         mMediaPlayer = MediaPlayer.create(UserToUserMessageNotification.this, R.raw.pop);
+        mMediaPlayer2 = MediaPlayer.create(UserToUserMessageNotification.this, R.raw.sound);
         maxVolume = 10;
         currVolume = 2;
+        currVolume2 = 8;
 
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -333,6 +334,10 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                         float log1=(float)(Math.log(maxVolume-currVolume)/Math.log(maxVolume));
                         mMediaPlayer.setVolume(1-log1,1-log1);
                         mMediaPlayer.start();
+                    }else if(userMessagee.getName().equals(UserDetails.username)){
+                        float log2=(float)(Math.log(maxVolume-currVolume2)/Math.log(maxVolume));
+                        mMediaPlayer2.setVolume(1-log2,1-log2);
+                        mMediaPlayer2.start();
                     }
 
                 }
