@@ -64,8 +64,6 @@ public class TotalMessages extends AppCompatActivity {
         mMessageListView.setAdapter(mMessageAdapter);
 
 
-        attachDatabaseReadListener();
-
         //adding listener to listview
         mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -148,6 +146,14 @@ public class TotalMessages extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onPostResume() {
+
+        attachDatabaseReadListener();
+
+        super.onPostResume();
     }
 
     private void attachDatabaseReadListener() {
