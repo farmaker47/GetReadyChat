@@ -49,7 +49,7 @@ public class TotalMessagesAdapter extends ArrayAdapter<Totalmessage> {
         messageTextView.setText(totalmessage.getSecondEnrty());
 
         String numberOfMessages = String.valueOf(UserDetails.numberOfMessages);
-        numberTextView.setText(numberOfMessages);
+        /*numberTextView.setText(numberOfMessages);*/
 
         return convertView;
     }

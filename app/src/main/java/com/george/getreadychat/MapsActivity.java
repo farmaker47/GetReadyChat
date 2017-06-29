@@ -55,6 +55,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Query queryTimestamp;
     private Query queryChildrenCount;
 
+    private int countNotifications;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,7 +278,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
                                                     .setSmallIcon(R.drawable.ic_launcher)
-                                                    .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
+                                                    .setContentTitle(usermessageOfLast.getName() + ":")
                                                     .setContentText(usermessageOfLast.getText())
                                                     .setOnlyAlertOnce(true)
                                                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
@@ -286,7 +288,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             Intent resultIntent = new Intent(MapsActivity.this, UserToUserMessageNotification.class);
                                             resultIntent.putExtra("chatsWith", tagStringForNotification);
                                             resultIntent.putExtra("chatsWithID", tagStringForID);
-                                    /*resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
 
                                             resultIntent.setAction(Long.toString(System.currentTimeMillis()));
 
@@ -310,7 +311,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
                                                     .setSmallIcon(R.drawable.ic_launcher)
-                                                    .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
+                                                    .setContentTitle(usermessageOfLast.getName() + ":")
                                                     .setContentText(usermessageOfLast.getText())
                                                     .setOnlyAlertOnce(true)
                                                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
@@ -341,7 +342,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
                                                     .setSmallIcon(R.drawable.ic_launcher)
-                                                    .setContentTitle(usermessageOfLast.getName() + "\t" + "said:")
+                                                    .setContentTitle(usermessageOfLast.getName() + ":")
                                                     .setContentText(usermessageOfLast.getText())
                                                     .setOnlyAlertOnce(true)
                                                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
