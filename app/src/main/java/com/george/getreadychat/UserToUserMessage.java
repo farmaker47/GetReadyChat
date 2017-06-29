@@ -84,8 +84,6 @@ public class UserToUserMessage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_to_user_message);
 
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(UserDetails.secondUser,1);
 
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -376,6 +374,10 @@ public class UserToUserMessage extends AppCompatActivity {
 
         super.onStart();
         isActive=true;
+
+
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(UserDetails.secondUser,1);
     }
 
     @Override

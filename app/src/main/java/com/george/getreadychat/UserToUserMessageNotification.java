@@ -1,5 +1,6 @@
 package com.george.getreadychat;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -403,6 +404,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         super.onStart();
         isActiveNotification = true;
+
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(UserDetails.UserChatsWith,1);
     }
 
     @Override
