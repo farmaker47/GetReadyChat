@@ -80,6 +80,8 @@ public class UserToUserMessage extends AppCompatActivity {
     private StorageReference mChatPhotosStorageReference;
 
     private MediaPlayer mMediaPlayer;
+    private int maxVolume;
+    private int currVolume;
 
 
     @Override
@@ -120,7 +122,9 @@ public class UserToUserMessage extends AppCompatActivity {
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
-        mMediaPlayer = MediaPlayer.create(UserToUserMessage.this, R.raw.sound);
+        mMediaPlayer = MediaPlayer.create(UserToUserMessage.this, R.raw.pop);
+        maxVolume = 10;
+        currVolume = 3;
 
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -308,6 +312,8 @@ public class UserToUserMessage extends AppCompatActivity {
                 Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
                 if(userMessagee.getName().equals(UserDetails.secondUser)){
+                    float log1=(float)(Math.log(maxVolume-currVolume)/Math.log(maxVolume));
+                    mMediaPlayer.setVolume(1-log1,1-log1);
                     mMediaPlayer.start();
                 }
 
