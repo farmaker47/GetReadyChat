@@ -230,7 +230,7 @@ public class UserToUserMessage extends AppCompatActivity {
     }
 
     private void attachDatabaseReadListenerDeliveryStatus() {
-        if (mDeliveryChildEventListener == null) {
+
             // Child event listener
             mDeliveryChildEventListener = new ChildEventListener() {
                 @Override
@@ -276,12 +276,11 @@ public class UserToUserMessage extends AppCompatActivity {
             };
 
             mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).addChildEventListener(mDeliveryChildEventListener);
-        }
+
 
     }
 
     private void attachDatabaseReadListenertoListView() {
-        if (mChildEventListener == null) {
             // Child event listener
             mChildEventListener = new ChildEventListener() {
                 @Override
@@ -359,7 +358,7 @@ public class UserToUserMessage extends AppCompatActivity {
             };
 
             mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).addChildEventListener(mChildEventListener);
-        }
+
     }
 
     @Override
@@ -373,6 +372,7 @@ public class UserToUserMessage extends AppCompatActivity {
 
 
         super.onStart();
+        Toast.makeText(UserToUserMessage.this,"onStart",Toast.LENGTH_LONG).show();
         isActive=true;
 
 
@@ -383,6 +383,9 @@ public class UserToUserMessage extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        mMessageAdapter.notifyDataSetChanged();
+        Toast.makeText(UserToUserMessage.this,"onResume",Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -390,11 +393,13 @@ public class UserToUserMessage extends AppCompatActivity {
 
         mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).removeEventListener(mDeliveryChildEventListener);
         mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).removeEventListener(mChildEventListener);
-        mChildEventListener = null;
-        mDeliveryChildEventListener = null;
+        /*mChildEventListener = null;
+        mDeliveryChildEventListener = null;*/
 
         super.onPause();
         isActive=false;
+
+        Toast.makeText(UserToUserMessage.this,"onPause",Toast.LENGTH_LONG).show();
 
 
     }
@@ -406,15 +411,20 @@ public class UserToUserMessage extends AppCompatActivity {
         if (mChildEventListener != null) {
             mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).removeEventListener(mDeliveryChildEventListener);
             mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).removeEventListener(mChildEventListener);
-            mChildEventListener = null;
-            mDeliveryChildEventListener = null;
+            /*mChildEventListener = null;
+            mDeliveryChildEventListener = null;*/
         }
         super.onStop();
         isActive=false;
-
+        Toast.makeText(UserToUserMessage.this,"onStop",Toast.LENGTH_LONG).show();
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(UserToUserMessage.this,"onDestroy",Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

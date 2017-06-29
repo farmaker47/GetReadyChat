@@ -245,7 +245,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     }
 
     private void attachDatabaseReadListenerDeliveryStatus() {
-        if (mDeliveryChildEventListener == null) {
+
             // Child event listener
             mDeliveryChildEventListener = new ChildEventListener() {
                 @Override
@@ -291,12 +291,12 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             };
 
             mMessagesDatabaseReference.addChildEventListener(mDeliveryChildEventListener);
-        }
+
 
     }
 
     private void attachDatabaseReadListenertoListView() {
-        if (mChildEventListener == null) {
+
             // Child event listener
             mChildEventListener = new ChildEventListener() {
                 @Override
@@ -389,7 +389,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             };
 
             mMessagesDatabaseReferenceSecondName.addChildEventListener(mChildEventListener);
-        }
+
     }
 
     @Override
@@ -419,8 +419,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         mMessagesDatabaseReference.removeEventListener(mDeliveryChildEventListener);
         mMessagesDatabaseReferenceSecondName.removeEventListener(mChildEventListener);
-        mChildEventListener = null;
-        mDeliveryChildEventListener = null;
+        /*mChildEventListener = null;
+        mDeliveryChildEventListener = null;*/
 
         super.onPause();
         isActiveNotification = false;
@@ -433,8 +433,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         if (mChildEventListener != null) {
             mMessagesDatabaseReference.removeEventListener(mDeliveryChildEventListener);
             mMessagesDatabaseReferenceSecondName.removeEventListener(mChildEventListener);
-            mChildEventListener = null;
-            mDeliveryChildEventListener = null;
+            /*mChildEventListener = null;
+            mDeliveryChildEventListener = null;*/
         }
         super.onStop();
     }
