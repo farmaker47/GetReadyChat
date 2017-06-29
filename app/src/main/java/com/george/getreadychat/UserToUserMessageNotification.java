@@ -395,6 +395,12 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     @Override
     protected void onStart() {
 
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onResume() {
         //to read messages for discovering/refreshing the delivery status
         attachDatabaseReadListenerDeliveryStatus();
 
@@ -402,16 +408,12 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         attachDatabaseReadListenertoListView();
 
 
-        super.onStart();
+        super.onResume();
         isActiveNotification = true;
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(UserDetails.UserChatsWith,1);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

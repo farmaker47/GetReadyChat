@@ -364,6 +364,13 @@ public class UserToUserMessage extends AppCompatActivity {
     @Override
     protected void onStart() {
 
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onResume() {
+
         //to read messages for discovering/refreshing the delivery status
         attachDatabaseReadListenerDeliveryStatus();
 
@@ -371,21 +378,15 @@ public class UserToUserMessage extends AppCompatActivity {
         attachDatabaseReadListenertoListView();
 
 
-        super.onStart();
-        Toast.makeText(UserToUserMessage.this,"onStart",Toast.LENGTH_LONG).show();
+
+        super.onResume();
         isActive=true;
 
+        mMessageAdapter.notifyDataSetChanged();
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(UserDetails.secondUser,1);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        mMessageAdapter.notifyDataSetChanged();
-        Toast.makeText(UserToUserMessage.this,"onResume",Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -398,9 +399,6 @@ public class UserToUserMessage extends AppCompatActivity {
 
         super.onPause();
         isActive=false;
-
-        Toast.makeText(UserToUserMessage.this,"onPause",Toast.LENGTH_LONG).show();
-
 
     }
 
@@ -416,14 +414,14 @@ public class UserToUserMessage extends AppCompatActivity {
         }
         super.onStop();
         isActive=false;
-        Toast.makeText(UserToUserMessage.this,"onStop",Toast.LENGTH_LONG).show();
+
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(UserToUserMessage.this,"onDestroy",Toast.LENGTH_LONG).show();
+
     }
 
     @Override
