@@ -1,6 +1,7 @@
 package com.george.getreadychat;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
         super(context, resource, objects);
         this.activity = context;
         this.objects = objects;
+
     }
 
     @NonNull
@@ -33,7 +35,7 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         UserMessage message = getItem(position);
-        int viewType=getItemViewType(position);
+        int viewType = getItemViewType(position);
 
 
         /*if (message.getName().equals(UserDetails.username)) {
@@ -42,16 +44,16 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
             layoutResource = R.layout.item_message_left;
         }*/
 
-        switch (viewType){
+        switch (viewType) {
             case 0:
                 ViewHolder holder1;
                 View v = convertView;
-                if(v == null){
+                if (v == null) {
                     LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
                     v = inflater.inflate(R.layout.item_message_right, parent, false);
                     holder1 = new ViewHolder(v);
                     v.setTag(holder1);
-                }else {
+                } else {
                     holder1 = (ViewHolder) v.getTag();
                 }
 
@@ -77,6 +79,7 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
 
                 } else {
                     holder1.authorTextView.setText(message.getName());
+
                 }
 
                 if (message.getIsReaded().equals("false")) {
@@ -95,12 +98,12 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
             case 1:
                 ViewHolder holder2 = null;
                 View vv = convertView;
-                if(vv == null){
+                if (vv == null) {
                     LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
                     vv = inflater.inflate(R.layout.item_message_left, parent, false);
                     holder2 = new ViewHolder(vv);
                     vv.setTag(holder2);
-                }else {
+                } else {
                     holder2 = (ViewHolder) vv.getTag();
                 }
 

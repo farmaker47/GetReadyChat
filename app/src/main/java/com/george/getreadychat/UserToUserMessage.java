@@ -3,6 +3,7 @@ package com.george.getreadychat;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -41,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class UserToUserMessage extends AppCompatActivity {
 
@@ -79,6 +79,8 @@ public class UserToUserMessage extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotosStorageReference;
 
+    private MediaPlayer mMediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +107,7 @@ public class UserToUserMessage extends AppCompatActivity {
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mSendButton = (Button) findViewById(R.id.sendButton);
         emptyLinearLayout = (LinearLayout) findViewById(R.id.emptyLinearLayout);
-        mFrameLayout = (FrameLayout)findViewById(R.id.frameLayout);
+        mFrameLayout = (FrameLayout) findViewById(R.id.frameLayout);
         mFrameLayout.setBackgroundResource(R.drawable.round2);
 
         // Initialize message ListView and its adapter
@@ -117,6 +119,8 @@ public class UserToUserMessage extends AppCompatActivity {
 
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
+        mMediaPlayer = MediaPlayer.create(UserToUserMessage.this, R.raw.sound);
 
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -166,12 +170,12 @@ public class UserToUserMessage extends AppCompatActivity {
                 }
 
                 //Creating a message
-                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
+                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).push().setValue(userMessage);
 
 
-                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
+                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).push().setValue(userMessage2);
 
@@ -217,10 +221,10 @@ public class UserToUserMessage extends AppCompatActivity {
 
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(),UserDetails.usernameID);
+                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(), UserDetails.usernameID);
                     mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).push().setValue(userMessage);
 
-                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
+                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
                     //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                     mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).push().setValue(userMessage2);
 
@@ -231,83 +235,86 @@ public class UserToUserMessage extends AppCompatActivity {
 
     private void attachDatabaseReadListenerDeliveryStatus() {
 
-            // Child event listener
-            mDeliveryChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        // Child event listener
+        mDeliveryChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                     /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
                     userMessage.setIsReaded("true");
                     mMessageAdapter.add(userMessage);*/
 
 
-                    String datasnapshoti = dataSnapshot.getKey();
-                    mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).child(datasnapshoti).child("isReaded").setValue("true");
+                String datasnapshoti = dataSnapshot.getKey();
+                mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).child(datasnapshoti).child("isReaded").setValue("true");
 
-                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).getKey();
-                    Log.e("datasnapsot", datasnapshoti + "----" + datasnapshotOfLastMessage);
+                String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).getKey();
+                Log.e("datasnapsot", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
-                    mMessageAdapter.notifyDataSetChanged();
-                    ////
+                mMessageAdapter.notifyDataSetChanged();
+                ////
                     /*friendlyMessage.setIsReaded(true);*/
 
-                }
+            }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    mMessageAdapter.notifyDataSetChanged();
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                mMessageAdapter.notifyDataSetChanged();
 
-                }
+            }
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                }
+            }
 
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            };
+            }
+        };
 
-            mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).addChildEventListener(mDeliveryChildEventListener);
+        mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).addChildEventListener(mDeliveryChildEventListener);
 
 
     }
 
     private void attachDatabaseReadListenertoListView() {
-            // Child event listener
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        // Child event listener
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                     /*getAllMessagesBetweenUsers(dataSnapshot);*/
-                    /////working
+                /////working
                     /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
                     mMessageAdapter.add(userMessage);
                     mMessageAdapter.notifyDataSetChanged();*/
-                    ///working
+                ///working
 
-                    UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+                UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
 
-                    userMessages.add(userMessagee);
+                userMessages.add(userMessagee);
 
-                    mMessageAdapter.notifyDataSetChanged();
+                mMessageAdapter.notifyDataSetChanged();
 
-                    String datasnapshoti = dataSnapshot.getKey();
-                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).getKey();
-                    Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
+                String datasnapshoti = dataSnapshot.getKey();
+                String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).getKey();
+                Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
-
+                if(userMessagee.getName().equals(UserDetails.secondUser)){
+                    mMediaPlayer.start();
                 }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                     /*UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
 
@@ -321,43 +328,41 @@ public class UserToUserMessage extends AppCompatActivity {
                     }*/
 
 
+                /////////
+                userMessages.remove(userMessages.size() - 1);
+
+                UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+
+                userMessages.add(userMessagee);
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mMessageAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                /////////
 
 
-                    /////////
-                    userMessages.remove(userMessages.size() - 1);
+            }
 
-                    UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                    userMessages.add(userMessagee);
+            }
 
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            mMessageAdapter.notifyDataSetChanged();
-                        }
-                    });
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                    /////////
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
+            }
+        };
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-
-            mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).addChildEventListener(mChildEventListener);
+        mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).addChildEventListener(mChildEventListener);
 
     }
 
@@ -378,14 +383,13 @@ public class UserToUserMessage extends AppCompatActivity {
         attachDatabaseReadListenertoListView();
 
 
-
         super.onResume();
-        isActive=true;
+        isActive = true;
 
         mMessageAdapter.notifyDataSetChanged();
 
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(UserDetails.secondUser,1);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(UserDetails.secondUser, 1);
 
     }
 
@@ -398,7 +402,7 @@ public class UserToUserMessage extends AppCompatActivity {
         mDeliveryChildEventListener = null;*/
 
         super.onPause();
-        isActive=false;
+        isActive = false;
 
     }
 
@@ -413,7 +417,7 @@ public class UserToUserMessage extends AppCompatActivity {
             mDeliveryChildEventListener = null;*/
         }
         super.onStop();
-        isActive=false;
+        isActive = false;
 
 
     }

@@ -3,6 +3,7 @@ package com.george.getreadychat;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -81,6 +82,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
     private StatusBarNotification mStatusBarNotification;
 
+    private MediaPlayer mMediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +134,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
+        mMediaPlayer = MediaPlayer.create(UserToUserMessageNotification.this, R.raw.pop);
 
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -320,9 +325,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                     Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
 
-                    ////
-                    /*friendlyMessage.setIsReaded(true);*/
-
+                    if(userMessagee.getName().equals(UserDetails.UserChatsWith)){
+                        mMediaPlayer.start();
+                    }
 
                 }
 
