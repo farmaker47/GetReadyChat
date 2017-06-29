@@ -139,7 +139,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         mMediaPlayer = MediaPlayer.create(UserToUserMessageNotification.this, R.raw.pop);
         maxVolume = 10;
-        currVolume = 3;
+        currVolume = 2;
 
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
