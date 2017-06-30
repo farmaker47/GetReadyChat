@@ -18,11 +18,13 @@ import android.widget.Toast;
 
 import com.george.getreadychat.data.ChatContract;
 import com.george.getreadychat.data.UserDetails;
+import com.george.getreadychat.mapsdata.MyItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -33,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.HashMap;
 
@@ -56,6 +59,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Query queryChildrenCount;
 
     private int countNotifications;
+
+    private ClusterManager<MyItem> mClusterManager;
 
 
     @Override
@@ -110,7 +115,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title("Φαρμακείο")
                 .snippet("Γεώργιου Σολούπη")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 12));
 
         id = farmakeioGeorgeSoloupis.getId();
         markerMap.put(id, ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME);
@@ -125,8 +130,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         id = farmakeioMariaVakalopoulou.getId();
         markerMap.put(id, ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME);
 
+        /////
+        /*setUpClusterer();*/
+        /////
+
 
         mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
+
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+
+                farmakeioMariaVakalopoulou.setVisible(cameraPosition.zoom > 14);
+
+            }
+        });
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -231,15 +249,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }*/
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        for(DataSnapshot secPostsnapshot : postSnapshot.getChildren()){
-                            for(DataSnapshot thirdPostSnapsot : secPostsnapshot.getChildren()){
+                        for (DataSnapshot secPostsnapshot : postSnapshot.getChildren()) {
+                            for (DataSnapshot thirdPostSnapsot : secPostsnapshot.getChildren()) {
 
 
                                 queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey())
                                         .child(secPostsnapshot.getKey())
                                         .child(thirdPostSnapsot.getKey())
                                         .orderByChild("timeStamp").limitToLast(1);
-                                Log.e("minima",mMessagesDatabaseReference.child(UserDetails.usernameID).child(postSnapshot.getKey())
+                                Log.e("minima", mMessagesDatabaseReference.child(UserDetails.usernameID).child(postSnapshot.getKey())
                                         .child(secPostsnapshot.getKey())
                                         .child(thirdPostSnapsot.getKey()).toString());
 
@@ -398,7 +416,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
                                             String falseCount = userMessage.getIsReaded();
                                             if (falseCount.equals("false")) {
-                                                UserDetails.numberOfMessages ++;
+                                                UserDetails.numberOfMessages++;
                                             }
                                         }
 
@@ -438,8 +456,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Log.e("MainActivitySecond", UserDetails.secondUser);
 
 
-
-
                     }
 
 
@@ -455,4 +471,75 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMessagesDatabaseReference.addValueEventListener(mValueEventListener);
         }
     }
+
+    protected GoogleMap getMap() {
+        return mMap;
+    }
+
+    private void setUpClusterer() {
+        // Position the map.
+        getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.8696, 22.91), 10));
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<MyItem>(this, getMap());
+
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        getMap().setOnCameraIdleListener(mClusterManager);
+        getMap().setOnMarkerClickListener(mClusterManager);
+
+        // Add cluster items (markers) to the cluster manager.
+        addItems();
+    }
+
+    private void addItems() {
+
+        // Set some lat/lng coordinates to start with.
+        double lat = 40.8696;
+        double lng = 22.91;
+
+        double lat1 = 40.871234;
+        double lng1 = 22.909053;
+
+        // Add ten cluster items in close proximity, for purposes of this example.
+        /*for (int i = 0; i < 10; i++) {
+            double offset = i / 60d;
+            lat = lat + offset;
+            lng = lng + offset;
+            MyItem offsetItem = new MyItem(lat, lng);
+            mClusterManager.addItem(offsetItem);
+        }*/
+
+        MyItem offsetItem = new MyItem(lat, lng);
+        mClusterManager.addItem(offsetItem);
+        MyItem offsetItem2 = new MyItem(lat1, lng1);
+        mClusterManager.addItem(offsetItem2);
+
+        /*String id = null;
+
+        // Add a marker in Sydney and move the camera
+        LatLng farmakeioGS = new LatLng(40.8696, 22.91);
+        farmakeioGeorgeSoloupis = mMap.addMarker(new MarkerOptions()
+                .position(farmakeioGS)
+                .title("Φαρμακείο")
+                .snippet("Γεώργιου Σολούπη")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 16));
+
+        id = farmakeioGeorgeSoloupis.getId();
+        markerMap.put(id, ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME);
+
+        LatLng farmakeioMV = new LatLng(40.871234, 22.909053);
+        farmakeioMariaVakalopoulou = mMap.addMarker(new MarkerOptions()
+                .position(farmakeioMV)
+                .title("Φαρμακείο")
+                .snippet("Μαρία Βακαλοπούλου")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pharm)));
+
+        id = farmakeioMariaVakalopoulou.getId();
+        markerMap.put(id, ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME);*/
+
+    }
+
 }
