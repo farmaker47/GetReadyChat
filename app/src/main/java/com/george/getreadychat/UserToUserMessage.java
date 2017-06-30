@@ -3,6 +3,7 @@ package com.george.getreadychat;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -122,11 +123,11 @@ public class UserToUserMessage extends AppCompatActivity {
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
-        mMediaPlayer = MediaPlayer.create(UserToUserMessage.this, R.raw.pop);
-        mMediaPlayer2 = MediaPlayer.create(UserToUserMessage.this, R.raw.sound);
+        mMediaPlayer = MediaPlayer.create(UserToUserMessage.this, R.raw.sound1);
+        mMediaPlayer2 = MediaPlayer.create(UserToUserMessage.this, R.raw.sound2);
         maxVolume = 10;
-        currVolume = 2;
-        currVolume2 = 8;
+        currVolume = 8;
+        currVolume2 = 4;
 
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -316,11 +317,15 @@ public class UserToUserMessage extends AppCompatActivity {
                 if(userMessagee.getName().equals(UserDetails.secondUser)){
                     float log1=(float)(Math.log(maxVolume-currVolume)/Math.log(maxVolume));
                     mMediaPlayer.setVolume(1-log1,1-log1);
+
                     mMediaPlayer.start();
+
                 }else if(userMessagee.getName().equals(UserDetails.username)){
                     float log2=(float)(Math.log(maxVolume-currVolume2)/Math.log(maxVolume));
                     mMediaPlayer2.setVolume(1-log2,1-log2);
+
                     mMediaPlayer2.start();
+
                 }
 
             }

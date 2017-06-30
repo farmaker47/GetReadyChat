@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class ChatSound {
 
-    public static final int S1 = R.raw.sound;
+    public static final int S1 = R.raw.sound1;
 
     private static SoundPool soundPool;
     private static HashMap soundPoolMap;
@@ -18,7 +18,7 @@ public class ChatSound {
     public static void initSounds(Context context) {
         soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 100);
         soundPoolMap = new HashMap(1);
-        soundPoolMap.put( S1, soundPool.load(context, R.raw.sound, 1) );
+        soundPoolMap.put( S1, soundPool.load(context, R.raw.sound1, 1) );
 
     }
 
