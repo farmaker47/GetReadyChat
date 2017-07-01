@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.george.getreadychat.data.ChatContract;
 import com.george.getreadychat.data.UserDetails;
 import com.george.getreadychat.mapsdata.MyItem;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -77,9 +79,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        /*setupMapIfNeeded();*/
 
         markerMap = new HashMap<String, String>();
 
@@ -88,6 +88,66 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //making the references
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username);
+    }
+
+    private void setupMapIfNeeded() {
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        if (mMap == null) {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        }
+    }
+
+    public class MapStateManager {
+
+        private static final String LONGITUDE = "longitude";
+        private static final String LATITUDE = "latitude";
+        private static final String ZOOM = "zoom";
+        private static final String BEARING = "bearing";
+        private static final String TILT = "tilt";
+        private static final String MAPTYPE = "MAPTYPE";
+
+        private static final String PREFS_NAME ="mapCameraStateOfChat";
+
+        private SharedPreferences mapStatePrefs;
+
+        public MapStateManager(Context context) {
+            mapStatePrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        }
+
+        public void saveMapState(GoogleMap mapMie) {
+            SharedPreferences.Editor editor = mapStatePrefs.edit();
+            CameraPosition position = mapMie.getCameraPosition();
+
+            editor.putFloat(LATITUDE, (float) position.target.latitude);
+            editor.putFloat(LONGITUDE, (float) position.target.longitude);
+            editor.putFloat(ZOOM, position.zoom);
+            editor.putFloat(TILT, position.tilt);
+            editor.putFloat(BEARING, position.bearing);
+            editor.putInt(MAPTYPE, mapMie.getMapType());
+            editor.commit();
+        }
+
+        public CameraPosition getSavedCameraPosition() {
+            double latitude = mapStatePrefs.getFloat(LATITUDE, 0);
+            if (latitude == 0) {
+                return null;
+            }
+            double longitude = mapStatePrefs.getFloat(LONGITUDE, 0);
+            LatLng target = new LatLng(latitude, longitude);
+
+            float zoom = mapStatePrefs.getFloat(ZOOM, 0);
+            float bearing = mapStatePrefs.getFloat(BEARING, 0);
+            float tilt = mapStatePrefs.getFloat(TILT, 0);
+
+            CameraPosition position = new CameraPosition(target, zoom, tilt, bearing);
+            return position;
+        }
+
+        public int getSavedMapType() {
+            return mapStatePrefs.getInt(MAPTYPE, GoogleMap.MAP_TYPE_NORMAL);
+        }
     }
 
 
@@ -106,16 +166,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
+
         String id = null;
 
         // Add a marker in Sydney and move the camera
-        LatLng farmakeioGS = new LatLng(40.8696, 22.91);
+        LatLng farmakeioGS = new LatLng(37.297319, 21.701375);
         farmakeioGeorgeSoloupis = mMap.addMarker(new MarkerOptions()
                 .position(farmakeioGS)
                 .title("Φαρμακείο")
                 .snippet("Γεώργιου Σολούπη")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 12));
+
+        /*mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 12));*/
 
         id = farmakeioGeorgeSoloupis.getId();
         markerMap.put(id, ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME);
@@ -141,7 +204,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
 
-                farmakeioMariaVakalopoulou.setVisible(cameraPosition.zoom > 14);
+                farmakeioMariaVakalopoulou.setVisible(cameraPosition.zoom > 9);
 
             }
         });
@@ -168,17 +231,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
+
+        /////
+        MapStateManager mgr = new MapStateManager(this);
+        CameraPosition position = mgr.getSavedCameraPosition();
+        if (position != null) {
+            CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
+            mMap.moveCamera(update);
+
+            mMap.setMapType(mgr.getSavedMapType());
+        }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        MapStateManager mgr = new MapStateManager(this);
+        mgr.saveMapState(mMap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupMapIfNeeded();
+        attachListenerForNotifications();
+    }
+
+
 
     class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
-        private final View mWindow;
+        private View mWindow;
 
 
-        CustomInfoWindowAdapter() {
+        /*CustomInfoWindowAdapter() {
             mWindow = getLayoutInflater().inflate(R.layout.custom_info_window, null);
-            /*mContents = getLayoutInflater().inflate(R.layout.custom_info_contents, null);*/
-        }
+            *//*mContents = getLayoutInflater().inflate(R.layout.custom_info_contents, null);*//*
+        }*/
 
         @Override
         public View getInfoWindow(Marker marker) {
@@ -220,11 +310,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        attachListenerForNotifications();
-    }
+
 
     private void attachListenerForNotifications() {
 

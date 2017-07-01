@@ -1,9 +1,9 @@
 package com.george.getreadychat;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -80,9 +82,9 @@ public class UserToUserMessage extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotosStorageReference;
 
-    private MediaPlayer mMediaPlayer,mMediaPlayer2;
+    private MediaPlayer mMediaPlayer, mMediaPlayer2;
     private int maxVolume;
-    private int currVolume,currVolume2;
+    private int currVolume, currVolume2;
 
 
     @Override
@@ -119,6 +121,21 @@ public class UserToUserMessage extends AppCompatActivity {
         mMessageListView.setAdapter(mMessageAdapter);
 
         mMessageListView.setEmptyView(emptyLinearLayout);
+
+        mMessageListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                if (scrollState != 0) {
+                    InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(absListView.getApplicationWindowToken(), 0);
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
 
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -314,15 +331,15 @@ public class UserToUserMessage extends AppCompatActivity {
                 String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).getKey();
                 Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
-                if(userMessagee.getName().equals(UserDetails.secondUser)){
-                    float log1=(float)(Math.log(maxVolume-currVolume)/Math.log(maxVolume));
-                    mMediaPlayer.setVolume(1-log1,1-log1);
+                if (userMessagee.getName().equals(UserDetails.secondUser)) {
+                    float log1 = (float) (Math.log(maxVolume - currVolume) / Math.log(maxVolume));
+                    mMediaPlayer.setVolume(1 - log1, 1 - log1);
 
                     mMediaPlayer.start();
 
-                }else if(userMessagee.getName().equals(UserDetails.username)){
-                    float log2=(float)(Math.log(maxVolume-currVolume2)/Math.log(maxVolume));
-                    mMediaPlayer2.setVolume(1-log2,1-log2);
+                } else if (userMessagee.getName().equals(UserDetails.username)) {
+                    float log2 = (float) (Math.log(maxVolume - currVolume2) / Math.log(maxVolume));
+                    mMediaPlayer2.setVolume(1 - log2, 1 - log2);
 
                     mMediaPlayer2.start();
 
