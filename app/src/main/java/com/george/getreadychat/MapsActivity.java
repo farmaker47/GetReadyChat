@@ -169,8 +169,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
-
         String id = null;
 
         // Add a marker in Sydney and move the camera
@@ -181,7 +179,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .snippet("Γεώργιου Σολούπη")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
 
-        /*mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 12));*/
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 7));
 
         id = farmakeioGeorgeSoloupis.getId();
         markerMap.put(id, ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME);
