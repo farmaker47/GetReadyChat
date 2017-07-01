@@ -2,7 +2,9 @@ package com.george.getreadychat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.george.getreadychat.data.ChatContract;
 import com.george.getreadychat.data.UserDetails;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -75,9 +78,15 @@ public class TotalMessages extends AppCompatActivity {
                 String dummy = textViewDummy.getText().toString();
 
 
-                /*mMessagesDatabaseReference2 = mFirebaseDatabase.getReference().child(strUsername).child(text);*/
-                UserDetails.secondUser = text;
-                UserDetails.secondUserID = dummy;
+
+                /*UserDetails.secondUser = text;
+                UserDetails.secondUserID = dummy;*/
+
+                SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(TotalMessages.this);
+                SharedPreferences.Editor editor = mUsersInfo.edit();
+                editor.putString("secondUsersecondUser", text);
+                editor.putString("secondUserIDsecondUserID",dummy);
+                editor.commit();
 
                 Intent a = new Intent(TotalMessages.this, UserToUserMessage.class);
                 startActivity(a);
@@ -149,12 +158,12 @@ public class TotalMessages extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
-
+    protected void onResume() {
+        super.onResume();
         attachDatabaseReadListener();
-
-        super.onPostResume();
     }
+
+
 
     private void attachDatabaseReadListener() {
         if (mChildEventListener == null) {

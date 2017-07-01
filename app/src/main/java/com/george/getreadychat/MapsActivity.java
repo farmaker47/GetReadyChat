@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -65,10 +66,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ClusterManager<MyItem> mClusterManager;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         // Get details on the currently active default data
@@ -218,15 +221,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (m.equals(ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME)) {
                     Intent intent = new Intent(MapsActivity.this, UserToUserMessage.class);
                     startActivity(intent);
-                    UserDetails.secondUser = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME;
-                    UserDetails.secondUserID = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY;
+
+                    SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+                    SharedPreferences.Editor editor = mUsersInfo.edit();
+                    editor.putString("secondUsersecondUser",ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME);
+                    editor.putString("secondUserIDsecondUserID",ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY);
+                    editor.commit();
+
+
+
+                    /*UserDetails.secondUser = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME;
+                    UserDetails.secondUserID = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY;*/
                 }
 
                 if (m.equals(ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME)) {
                     Intent intent = new Intent(MapsActivity.this, UserToUserMessage.class);
                     startActivity(intent);
+
+                    SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+                    SharedPreferences.Editor editor = mUsersInfo.edit();
+                    editor.putString("secondUsersecondUser",ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME);
+                    editor.putString("secondUserIDsecondUserID",ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_KEY);
+                    editor.commit();
+
+                    /*
                     UserDetails.secondUser = ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME;
-                    UserDetails.secondUserID = ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_KEY;
+                    UserDetails.secondUserID = ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_KEY;*/
                 }
 
             }

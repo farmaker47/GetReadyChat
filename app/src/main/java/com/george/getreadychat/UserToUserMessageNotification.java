@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -30,6 +32,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.george.getreadychat.data.ChatContract;
 import com.george.getreadychat.data.UserDetails;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -103,6 +106,12 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         UserDetails.UserChatsWithID = intent.getStringExtra("chatsWithID");
         /*String ad = intent.getStringExtra("title");*/
         Log.e("UserChatsWith", UserDetails.UserChatsWith+UserDetails.UserChatsWithID);
+
+        SharedPreferences mUsersInfoNotification = PreferenceManager.getDefaultSharedPreferences(UserToUserMessageNotification.this);
+        SharedPreferences.Editor editor = mUsersInfoNotification.edit();
+        editor.putString("userChatsWithuserChatsWith", UserDetails.UserChatsWith);
+        editor.putString("userChatsWithIDuserChatsWithID",UserDetails.UserChatsWithID);
+        editor.commit();
 
 
         /*Toast.makeText(this,"Second User= " + UserDetails.secondUser,Toast.LENGTH_LONG).show();*/
@@ -440,14 +449,18 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
+
+        SharedPreferences mUsersInfoNotification = PreferenceManager.getDefaultSharedPreferences(UserToUserMessageNotification.this);
+        UserDetails.UserChatsWith = mUsersInfoNotification.getString("userChatsWithuserChatsWith","");
+        UserDetails.UserChatsWithID = mUsersInfoNotification.getString("userChatsWithIDuserChatsWithID","");
+
         //to read messages for discovering/refreshing the delivery status
         attachDatabaseReadListenerDeliveryStatus();
 
         //for loading messages to the listview
         attachDatabaseReadListenertoListView();
 
-
-        super.onResume();
         isActiveNotification = true;
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);

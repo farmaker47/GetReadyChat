@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -47,6 +49,8 @@ import java.util.Date;
 import java.util.List;
 
 public class UserToUserMessage extends AppCompatActivity {
+
+
 
     //check if activity is active
     static boolean isActive = false;
@@ -91,6 +95,12 @@ public class UserToUserMessage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_to_user_message);
+
+        SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
+        UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser","");
+        UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID","");
+        /*Log.e("onResumeCheckNames",UserDetails.secondUser+UserDetails.secondUserID);*/
+
 
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -422,8 +432,14 @@ public class UserToUserMessage extends AppCompatActivity {
 
         mMessageAdapter.notifyDataSetChanged();
 
+        SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
+        UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser","");
+        UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID","");
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(UserDetails.secondUser, 1);
+
+
 
     }
 
@@ -452,7 +468,6 @@ public class UserToUserMessage extends AppCompatActivity {
         }
         super.onStop();
         isActive = false;
-
 
     }
 
