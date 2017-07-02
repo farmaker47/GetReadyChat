@@ -18,4 +18,6 @@
     <string name="signInOK">You are signed in!!</string>
     <string name="signNOT">Sign in failed</string>
     <string name="NoInternet">No internet access!!</string>
+    <string name="deleteConversation">Delete Conversation??</string>
+    <string name="permanentDelete">This action will permanently delete messages for both sender and receiver</string>
 </resources>

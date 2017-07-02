@@ -17,7 +17,6 @@ public class UserMessageAdapter extends ArrayAdapter<UserMessage> {
 
     private Context mContext;
     private List<UserMessage> objects;
-    /*AfterPickingMessages act = (AfterPickingMessages) mContext;*/
 
     public UserMessageAdapter(Context context, int resource, List<UserMessage> objects) {
         super(context, resource, objects);
@@ -37,9 +36,6 @@ public class UserMessageAdapter extends ArrayAdapter<UserMessage> {
         TextView authorTextView = (TextView) convertView.findViewById(R.id.nameTextView);
         TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
         TextView readedTextView = (TextView) convertView.findViewById(R.id.isReadTextView);
-
-
-        /*TextView nameToNameTextView = (TextView) convertView.findViewById(R.id.nameToNameTextView);*/
 
         UserMessage message = getItem(position);
 

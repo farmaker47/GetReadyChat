@@ -37,13 +37,6 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
         UserMessage message = getItem(position);
         int viewType = getItemViewType(position);
 
-
-        /*if (message.getName().equals(UserDetails.username)) {
-            layoutResource = R.layout.item_message_right;
-        } else {
-            layoutResource = R.layout.item_message_left;
-        }*/
-
         switch (viewType) {
             case 0:
                 ViewHolder holder1;
@@ -56,7 +49,6 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
                 } else {
                     holder1 = (ViewHolder) v.getTag();
                 }
-
 
                 boolean isPhoto = message.getPhotoUrl() != null;
                 if (isPhoto) {
@@ -72,7 +64,6 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
                 }
 
                 holder1.timeTextView.setText(message.getTime());
-
 
                 if (message.getName().equals(UserDetails.username)) {
                     holder1.authorTextView.setText(R.string.stringMyName);
@@ -92,8 +83,8 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
                     holder1.readedTextView.setText("");
                 }
 
-
                 return v;
+
 
             case 1:
                 ViewHolder holder2 = null;
@@ -106,7 +97,6 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
                 } else {
                     holder2 = (ViewHolder) vv.getTag();
                 }
-
 
                 boolean isPhotoo = message.getPhotoUrl() != null;
                 if (isPhotoo) {
@@ -122,7 +112,6 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
                 }
 
                 holder2.timeTextView.setText(message.getTime());
-
 
                 if (message.getName().equals(UserDetails.username)) {
                     holder2.authorTextView.setText(R.string.stringMyName);
@@ -140,7 +129,6 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
                 if (!message.getName().equals(UserDetails.username)) {
                     holder2.readedTextView.setText("");
                 }
-
 
                 return vv;
         }

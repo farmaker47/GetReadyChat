@@ -50,8 +50,6 @@ import java.util.List;
 
 public class UserToUserMessage extends AppCompatActivity {
 
-
-
     //check if activity is active
     static boolean isActive = false;
 
@@ -99,8 +97,6 @@ public class UserToUserMessage extends AppCompatActivity {
         SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
         UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser","");
         UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID","");
-        /*Log.e("onResumeCheckNames",UserDetails.secondUser+UserDetails.secondUserID);*/
-
 
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -200,7 +196,7 @@ public class UserToUserMessage extends AppCompatActivity {
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
                 // If there is a network connection, fetch data
                 if (networkInfo == null) {
-                    Toast.makeText(UserToUserMessage.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserToUserMessage.this, getResources().getString(R.string.NoInternet), Toast.LENGTH_LONG).show();
                 }
 
                 //Creating a message
@@ -223,7 +219,6 @@ public class UserToUserMessage extends AppCompatActivity {
             }
         });
 
-        /*attachDatabaseReadListener();*/
     }
 
     @Override
@@ -250,7 +245,7 @@ public class UserToUserMessage extends AppCompatActivity {
                     NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
                     // If there is a network connection, fetch data
                     if (networkInfo == null) {
-                        Toast.makeText(UserToUserMessage.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserToUserMessage.this, getResources().getString(R.string.NoInternet), Toast.LENGTH_LONG).show();
                     }
 
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
@@ -274,11 +269,6 @@ public class UserToUserMessage extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    userMessage.setIsReaded("true");
-                    mMessageAdapter.add(userMessage);*/
-
-
                 String datasnapshoti = dataSnapshot.getKey();
                 mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).child(datasnapshoti).child("isReaded").setValue("true");
 
@@ -286,9 +276,6 @@ public class UserToUserMessage extends AppCompatActivity {
                 Log.e("datasnapsot", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
                 mMessageAdapter.notifyDataSetChanged();
-                ////
-                    /*friendlyMessage.setIsReaded(true);*/
-
             }
 
             @Override
@@ -324,13 +311,6 @@ public class UserToUserMessage extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    /*getAllMessagesBetweenUsers(dataSnapshot);*/
-                /////working
-                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    mMessageAdapter.add(userMessage);
-                    mMessageAdapter.notifyDataSetChanged();*/
-                ///working
-
                 UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
 
                 userMessages.add(userMessagee);
@@ -360,19 +340,6 @@ public class UserToUserMessage extends AppCompatActivity {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    /*UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
-
-                    for(UserMessage removeMessage: userMessages){
-
-                        if(userMessagee.equals(removeMessage)){
-                            userMessages.remove(removeMessage);
-                            mMessageAdapter.notifyDataSetChanged();
-                            break;
-                        }
-                    }*/
-
-
-                /////////
                 userMessages.remove(userMessages.size() - 1);
 
                 UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
@@ -384,9 +351,6 @@ public class UserToUserMessage extends AppCompatActivity {
                         mMessageAdapter.notifyDataSetChanged();
                     }
                 });
-
-                /////////
-
 
             }
 
@@ -412,9 +376,7 @@ public class UserToUserMessage extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
         super.onStart();
-
     }
 
     @Override
@@ -438,8 +400,6 @@ public class UserToUserMessage extends AppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(UserDetails.secondUser, 1);
-
-
 
     }
 
@@ -512,30 +472,4 @@ public class UserToUserMessage extends AppCompatActivity {
         return curMillis;
     }
 
-    private void updateItemAtPosition(int position) {
-        int visiblePosition = mMessageListView.getFirstVisiblePosition();
-        View view = mMessageListView.getChildAt(position - visiblePosition);
-        mMessageListView.getAdapter().getView(position, view, mMessageListView);
-    }
-
-    private void getAllMessagesBetweenUsers(DataSnapshot dataSnapshot) {
-        for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-
-            UserMessage taskTitle = singleSnapshot.getValue(UserMessage.class);
-
-            List<UserMessage> userMessages = new ArrayList<>();
-            userMessages.add(taskTitle);
-
-            mMessageAdapter = new UserMessageAdapterBubbles(this, R.layout.item_message, userMessages);
-
-            mMessageListView.setAdapter(mMessageAdapter);
-           /* recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, allTask);
-            recyclerView.setAdapter(recyclerViewAdapter);
-
-
-            List<UserMessage> userMessages = new ArrayList<>();
-            mMessageAdapter = new UserMessageAdapter(this, R.layout.item_message, userMessages);
-            mMessageListView.setAdapter(mMessageAdapter);*/
-        }
-    }
 }

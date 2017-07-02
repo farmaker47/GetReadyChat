@@ -8,15 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.george.getreadychat.data.UserDetails;
-
-import java.security.Key;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static android.R.attr.key;
-import static android.R.attr.value;
 
 
 public class TotalMessagesAdapter extends ArrayAdapter<Totalmessage> {
@@ -43,13 +35,13 @@ public class TotalMessagesAdapter extends ArrayAdapter<Totalmessage> {
         TextView numberTextView = (TextView) convertView.findViewById(R.id.allNumberTextView);
         dummyTextView.setVisibility(View.INVISIBLE);
 
-        Totalmessage totalmessage= getItem(position);
+        Totalmessage totalmessage = getItem(position);
 
         dummyTextView.setText(totalmessage.getFirstEntry());
         messageTextView.setText(totalmessage.getSecondEnrty());
 
-        String numberOfMessages = String.valueOf(UserDetails.numberOfMessages);
-        /*numberTextView.setText(numberOfMessages);*/
+        /*String numberOfMessages = String.valueOf(UserDetails.numberOfMessages);
+        numberTextView.setText(numberOfMessages);*/
 
         return convertView;
     }
