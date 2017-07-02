@@ -199,7 +199,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
 
-                farmakeioMariaVakalopoulou.setVisible(cameraPosition.zoom > 9);
+                farmakeioMariaVakalopoulou.setVisible(cameraPosition.zoom > 8);
 
             }
         });
