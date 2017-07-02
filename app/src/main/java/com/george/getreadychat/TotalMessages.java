@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class TotalMessages extends AppCompatActivity {
 
     private TotalMessagesAdapter mMessageAdapter;
     private ListView mMessageListView;
+    private LinearLayout emptyLinearLayout;
 
     private FirebaseDatabase mFirebaseDatabase;
 
@@ -52,6 +54,7 @@ public class TotalMessages extends AppCompatActivity {
         setContentView(R.layout.activity_total_messages);
 
         mMessageListView = (ListView) findViewById(R.id.allMessageListView);
+        emptyLinearLayout = (LinearLayout) findViewById(R.id.emptyLinearLayout);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username).child(UserDetails.usernameID);
@@ -61,6 +64,8 @@ public class TotalMessages extends AppCompatActivity {
         userNameMessages = new ArrayList<>();
         mMessageAdapter = new TotalMessagesAdapter(this, R.layout.item_all_message, userNameMessages);
         mMessageListView.setAdapter(mMessageAdapter);
+
+        mMessageListView.setEmptyView(emptyLinearLayout);
 
         //adding listener to listview
         mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

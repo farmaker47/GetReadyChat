@@ -112,7 +112,6 @@ public class UserToUserMessage extends AppCompatActivity {
         mChatPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
 
         // Initialize references to views
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageListView = (ListView) findViewById(R.id.messageListView);
         mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
@@ -142,9 +141,6 @@ public class UserToUserMessage extends AppCompatActivity {
 
             }
         });
-
-        // Initialize progress bar
-        mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
         mMediaPlayer = MediaPlayer.create(UserToUserMessage.this, R.raw.sound1);
         mMediaPlayer2 = MediaPlayer.create(UserToUserMessage.this, R.raw.sound2);
