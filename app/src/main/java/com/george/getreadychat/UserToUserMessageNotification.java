@@ -100,11 +100,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         isActiveNotification = true;
 
-
         Intent intent = getIntent();
         UserDetails.UserChatsWith = intent.getStringExtra("chatsWith");
         UserDetails.UserChatsWithID = intent.getStringExtra("chatsWithID");
-        /*String ad = intent.getStringExtra("title");*/
         Log.e("UserChatsWith", UserDetails.UserChatsWith+UserDetails.UserChatsWithID);
 
         SharedPreferences mUsersInfoNotification = PreferenceManager.getDefaultSharedPreferences(UserToUserMessageNotification.this);
@@ -112,9 +110,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         editor.putString("userChatsWithuserChatsWith", UserDetails.UserChatsWith);
         editor.putString("userChatsWithIDuserChatsWithID",UserDetails.UserChatsWithID);
         editor.commit();
-
-
-        /*Toast.makeText(this,"Second User= " + UserDetails.secondUser,Toast.LENGTH_LONG).show();*/
 
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -165,9 +160,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
         mMediaPlayer = MediaPlayer.create(UserToUserMessageNotification.this, R.raw.sound1);
-
         mMediaPlayer2 = MediaPlayer.create(UserToUserMessageNotification.this, R.raw.sound2);
-
         maxVolume = 10;
         currVolume = 8;
         currVolume2 = 4;
@@ -216,7 +209,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
                 // If there is a network connection, fetch data
                 if (networkInfo == null) {
-                    Toast.makeText(UserToUserMessageNotification.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserToUserMessageNotification.this, getResources().getString(R.string.NoInternet), Toast.LENGTH_LONG).show();
                 }
 
                 //Creating a message
@@ -224,11 +217,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReference.push().setValue(userMessage);
 
-
                 UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReferenceSecondName.push().setValue(userMessage2);
-
 
                 // Clear input box
                 mMessageEditText.setText("");
@@ -238,8 +229,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);*/
             }
         });
-
-        /*attachDatabaseReadListener();*/
 
     }
 
@@ -267,7 +256,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                     NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
                     // If there is a network connection, fetch data
                     if (networkInfo == null) {
-                        Toast.makeText(UserToUserMessageNotification.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserToUserMessageNotification.this, getResources().getString(R.string.NoInternet), Toast.LENGTH_LONG).show();
                     }
 
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
@@ -291,11 +280,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    userMessage.setIsReaded("true");
-                    mMessageAdapter.add(userMessage);*/
-
-
                     String datasnapshoti = dataSnapshot.getKey();
                     mMessagesDatabaseReference.child(datasnapshoti).child("isReaded").setValue("true");
 
@@ -303,8 +287,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                     Log.e("datasnapsot", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
                     mMessageAdapter.notifyDataSetChanged();
-                    ////
-                    /*friendlyMessage.setIsReaded(true);*/
 
                 }
 
@@ -342,13 +324,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    /*getAllMessagesBetweenUsers(dataSnapshot);*/
-                    /////working
-                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    mMessageAdapter.add(userMessage);
-                    mMessageAdapter.notifyDataSetChanged();*/
-                    ///working
-
                     UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
 
                     userMessages.add(userMessagee);
@@ -358,7 +333,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                     String datasnapshoti = dataSnapshot.getKey();
                     String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.getKey();
                     Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
-
 
                     if(userMessagee.getName().equals(UserDetails.UserChatsWith)){
                         float log1=(float)(Math.log(maxVolume-currVolume)/Math.log(maxVolume));
@@ -377,29 +351,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                   /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    mMessageAdapter.add(userMessage);
-                    mMessageAdapter.notifyDataSetChanged();*/
-
-                    /*updateItemAtPosition(lastListViewPosition);*/
-
-                    /*//remove last item
-                    mMessageListView.removeViewAt(mMessageListView.getLastVisiblePosition());
-                    mMessageAdapter.notifyDataSetChanged();
-*/
-                    /*UserMessage userMessage = dataSnapshot.getValue(UserMessage.class);
-                    mMessageAdapter.add(userMessage);*/
-
-                    /*runOnUiThread(new Runnable() {
-                        public void run() {
-                            mMessageAdapter.notifyDataSetChanged();
-                        }
-                    });*/
-
-                    /*recreate();
-                    mMessageAdapter.notifyDataSetChanged();*/
-
-                    /////////
                     userMessages.remove(userMessages.size() - 1);
 
                     UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
@@ -411,12 +362,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                             mMessageAdapter.notifyDataSetChanged();
                         }
                     });
-
-                    /////////
-
-
-                    /*mMessageAdapter.notifyDataSetChanged();*/
-
 
                 }
 
@@ -442,9 +387,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
         super.onStart();
-
     }
 
     @Override
