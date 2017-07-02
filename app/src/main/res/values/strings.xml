@@ -15,4 +15,7 @@
     <string name="title_activity_intro_screen">IntroScreen</string>
     <string name="dialogYes">Yes</string>
     <string name="dialogCancel">Cancel</string>
+    <string name="signInOK">You are signed in!!</string>
+    <string name="signNOT">Sign in failed</string>
+    <string name="NoInternet">No internet access!!</string>
 </resources>

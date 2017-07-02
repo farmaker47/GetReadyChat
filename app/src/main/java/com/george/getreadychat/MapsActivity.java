@@ -54,7 +54,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DatabaseReference mMessagesDatabaseReference;
     private DatabaseReference mNumberOfMessages;
 
-
     private ValueEventListener mValueEventListener;
     private ChildEventListener mChildEventListener;
 
@@ -64,8 +63,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int countNotifications;
 
     private ClusterManager<MyItem> mClusterManager;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +75,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         // If there is a network connection, fetch data
         if (networkInfo == null) {
-            Toast.makeText(MapsActivity.this, "No internet access!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MapsActivity.this, getResources().getString(R.string.NoInternet), Toast.LENGTH_SHORT).show();
         }
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        /*setupMapIfNeeded();*/
 
         markerMap = new HashMap<String, String>();
 
@@ -111,7 +105,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         private static final String TILT = "tilt";
         private static final String MAPTYPE = "MAPTYPE";
 
-        private static final String PREFS_NAME ="mapCameraStateOfChat";
+        private static final String PREFS_NAME = "mapCameraStateOfChat";
 
         private SharedPreferences mapStatePrefs;
 
@@ -171,7 +165,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         String id = null;
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker for George and move the camera
         LatLng farmakeioGS = new LatLng(37.297319, 21.701375);
         farmakeioGeorgeSoloupis = mMap.addMarker(new MarkerOptions()
                 .position(farmakeioGS)
@@ -222,11 +216,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
                     SharedPreferences.Editor editor = mUsersInfo.edit();
-                    editor.putString("secondUsersecondUser",ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME);
-                    editor.putString("secondUserIDsecondUserID",ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY);
+                    editor.putString("secondUsersecondUser", ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME);
+                    editor.putString("secondUserIDsecondUserID", ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY);
                     editor.commit();
-
-
 
                     /*UserDetails.secondUser = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME;
                     UserDetails.secondUserID = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY;*/
@@ -238,8 +230,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
                     SharedPreferences.Editor editor = mUsersInfo.edit();
-                    editor.putString("secondUsersecondUser",ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME);
-                    editor.putString("secondUserIDsecondUserID",ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_KEY);
+                    editor.putString("secondUsersecondUser", ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME);
+                    editor.putString("secondUserIDsecondUserID", ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_KEY);
                     editor.commit();
 
                     /*
@@ -264,7 +256,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onPause() {
         super.onPause();
-
         MapStateManager mgr = new MapStateManager(this);
         mgr.saveMapState(mMap);
     }
@@ -275,7 +266,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setupMapIfNeeded();
         attachListenerForNotifications();
     }
-
 
 
     class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
@@ -329,7 +319,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
     private void attachListenerForNotifications() {
 
         if (mValueEventListener == null) {
@@ -338,24 +327,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.e("attachlistener", "ondatachanged");
-
-                    //working loop for every second user,every message
-                    /*for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        for (DataSnapshot childd : child.getChildren()) {
-                            *//*String ssstring = mMessagesDatabaseReference.child(child.getKey()).child(childd.getKey()).getV;*//*
-
-                            UserMessage uuuserMesss = childd.getValue(UserMessage.class);
-                            String ssstring = uuuserMesss.getText();
-                            Toast.makeText(MainActivity.this,ssstring,Toast.LENGTH_SHORT).show();
-
-                        }
-                    }*/
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         for (DataSnapshot secPostsnapshot : postSnapshot.getChildren()) {
                             for (DataSnapshot thirdPostSnapsot : secPostsnapshot.getChildren()) {
-
 
                                 queryTimestamp = mMessagesDatabaseReference.child(postSnapshot.getKey())
                                         .child(secPostsnapshot.getKey())
@@ -374,19 +349,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         String stringName = usermessageOfLast.getName();
                                         String stringIsReaded = usermessageOfLast.getIsReaded();
 
-                                /*Toast.makeText(MainActivity.this, stringText, Toast.LENGTH_SHORT).show();*/
-
                                         UserToUserMessage userForCheckActive = null;
                                         UserToUserMessageNotification userForCheckNotificationActive = null;
 
-                                /*//giving the notifications different id
-                                long notifyTimeStamp = usermessageOfLast.getTimeStamp();
-                                String time = Long.toString(notifyTimeStamp);
-                                String timi = time.substring(9);
-                                int notifyID = Integer.parseInt(timi);*/
-
                                         int notifyID = 1;
-
 
                                         if (!stringName.equals(UserDetails.username) && stringIsReaded.equals("false") &&
                                                 !userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification) {
@@ -394,10 +360,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             String tagStringForNotification = usermessageOfLast.getName();
                                             String tagStringForID = usermessageOfLast.getNameId();
 
-                                    /*userForCheckActive.isActive && !userForCheckNotificationActive.isActiveNotification||
-                                            !userForCheckActive.isActive && userForCheckNotificationActive.isActiveNotification*/
                                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
                                                     .setSmallIcon(R.drawable.ic_launcher)
                                                     .setContentTitle(usermessageOfLast.getName() + ":")
@@ -430,7 +393,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             String tagStringForID = usermessageOfLast.getNameId();
 
                                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
                                                     .setSmallIcon(R.drawable.ic_launcher)
                                                     .setContentTitle(usermessageOfLast.getName() + ":")
@@ -461,7 +423,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             String tagStringForID = usermessageOfLast.getNameId();
 
                                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
                                                     .setSmallIcon(R.drawable.ic_launcher)
                                                     .setContentTitle(usermessageOfLast.getName() + ":")
@@ -549,19 +510,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             }
 
                         }
-                        /*Toast.makeText(MainActivity.this, postSnapshot.getKey(), Toast.LENGTH_SHORT).show();*/
-
-                        /*queryChildrenCount = mMessagesDatabaseReference.child(postSnapshot.getKey()).orderByChild("isReaded").equalTo("false");*/
-
-
-
-
-                        /*UserDetails.secondUser = postSnapshot.getKey();*/
-                        Log.e("MainActivitySecond", UserDetails.secondUser);
-
 
                     }
-
 
                 }
 
@@ -576,6 +526,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+    //trying to future cluster markers
     protected GoogleMap getMap() {
         return mMap;
     }
@@ -619,30 +571,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mClusterManager.addItem(offsetItem);
         MyItem offsetItem2 = new MyItem(lat1, lng1);
         mClusterManager.addItem(offsetItem2);
-
-        /*String id = null;
-
-        // Add a marker in Sydney and move the camera
-        LatLng farmakeioGS = new LatLng(40.8696, 22.91);
-        farmakeioGeorgeSoloupis = mMap.addMarker(new MarkerOptions()
-                .position(farmakeioGS)
-                .title("Φαρμακείο")
-                .snippet("Γεώργιου Σολούπη")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 16));
-
-        id = farmakeioGeorgeSoloupis.getId();
-        markerMap.put(id, ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME);
-
-        LatLng farmakeioMV = new LatLng(40.871234, 22.909053);
-        farmakeioMariaVakalopoulou = mMap.addMarker(new MarkerOptions()
-                .position(farmakeioMV)
-                .title("Φαρμακείο")
-                .snippet("Μαρία Βακαλοπούλου")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pharm)));
-
-        id = farmakeioMariaVakalopoulou.getId();
-        markerMap.put(id, ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME);*/
 
     }
 

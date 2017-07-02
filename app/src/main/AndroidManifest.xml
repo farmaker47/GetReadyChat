@@ -26,8 +26,8 @@
         </activity>
         <activity
             android:name=".UserToUserMessage"
-            android:label="@string/privateMessage"
             android:configChanges="orientation|screenSize"
+            android:label="@string/privateMessage"
             android:parentActivityName=".MapsActivity" />
         <activity
             android:name=".TotalMessages"
@@ -35,8 +35,8 @@
             android:parentActivityName=".MapsActivity"></activity>
         <activity
             android:name=".UserToUserMessageNotification"
-            android:label="@string/privateMessage"
             android:configChanges="orientation|screenSize"
+            android:label="@string/privateMessage"
             android:parentActivityName=".MapsActivity" />
 
         <meta-data

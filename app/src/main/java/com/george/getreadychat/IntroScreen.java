@@ -38,7 +38,7 @@ public class IntroScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro_screen);
 
-        mIntroButton = (Button)findViewById(R.id.buttonToMain);
+        mIntroButton = (Button) findViewById(R.id.buttonToMain);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,7 +63,7 @@ public class IntroScreen extends AppCompatActivity {
                 if (user != null) {
 
                     //Method toodo onSingnedIn with the name of the user
-                    onSignedInInitialize(user.getDisplayName(),user.getUid());
+                    onSignedInInitialize(user.getDisplayName(), user.getUid());
 
 
                 } else {
@@ -82,7 +82,7 @@ public class IntroScreen extends AppCompatActivity {
         mIntroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent a = new Intent(IntroScreen.this,MapsActivity.class);
+                Intent a = new Intent(IntroScreen.this, MapsActivity.class);
                 startActivity(a);
             }
         });
@@ -106,21 +106,21 @@ public class IntroScreen extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(IntroScreen.this, "You are signed in!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(IntroScreen.this, getResources().getString(R.string.signInOK), Toast.LENGTH_SHORT).show();
 
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(IntroScreen.this, "Cancelled!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(IntroScreen.this, getResources().getString(R.string.signNOT), Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
 
-    private void onSignedInInitialize(String username,String usernameId) {
+    private void onSignedInInitialize(String username, String usernameId) {
         mUsername = username;
 
         UserDetails.username = username;
         UserDetails.usernameID = usernameId;
-        Log.e("usernameInDetails", UserDetails.username+UserDetails.usernameID);
+        Log.e("usernameInDetails", UserDetails.username + UserDetails.usernameID);
 
     }
 
@@ -131,7 +131,7 @@ public class IntroScreen extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_intro, menu);
         return true;
     }
 
@@ -145,15 +145,9 @@ public class IntroScreen extends AppCompatActivity {
                 //sign out
                 AuthUI.getInstance().signOut(this);
                 return true;
-            case R.id.action_settings:
-                Intent intentToTotalMessages = new Intent(IntroScreen.this, TotalMessages.class);
-                startActivity(intentToTotalMessages);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 
 }
