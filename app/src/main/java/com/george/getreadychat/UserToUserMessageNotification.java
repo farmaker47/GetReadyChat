@@ -1,11 +1,9 @@
 package com.george.getreadychat;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -32,7 +30,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.george.getreadychat.data.ChatContract;
 import com.george.getreadychat.data.UserDetails;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -89,9 +86,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
     private StatusBarNotification mStatusBarNotification;
 
-    private MediaPlayer mMediaPlayer,mMediaPlayer2;
+    private MediaPlayer mMediaPlayer, mMediaPlayer2;
     private int maxVolume;
-    private int currVolume,currVolume2;
+    private int currVolume, currVolume2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,12 +100,12 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         Intent intent = getIntent();
         UserDetails.UserChatsWith = intent.getStringExtra("chatsWith");
         UserDetails.UserChatsWithID = intent.getStringExtra("chatsWithID");
-        Log.e("UserChatsWith", UserDetails.UserChatsWith+UserDetails.UserChatsWithID);
+        Log.e("UserChatsWith", UserDetails.UserChatsWith + UserDetails.UserChatsWithID);
 
         SharedPreferences mUsersInfoNotification = PreferenceManager.getDefaultSharedPreferences(UserToUserMessageNotification.this);
         SharedPreferences.Editor editor = mUsersInfoNotification.edit();
         editor.putString("userChatsWithuserChatsWith", UserDetails.UserChatsWith);
-        editor.putString("userChatsWithIDuserChatsWithID",UserDetails.UserChatsWithID);
+        editor.putString("userChatsWithIDuserChatsWithID", UserDetails.UserChatsWithID);
         editor.commit();
 
         //Instantiating the database..access point of the database reference
@@ -130,7 +127,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mSendButton = (Button) findViewById(R.id.sendButton);
         emptyLinearLayout = (LinearLayout) findViewById(R.id.emptyLinearLayout);
-        mFrameLayout = (FrameLayout)findViewById(R.id.frameLayout);
+        mFrameLayout = (FrameLayout) findViewById(R.id.frameLayout);
         mFrameLayout.setBackgroundResource(R.drawable.round3);
 
         // Initialize message ListView and its adapter
@@ -143,7 +140,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         mMessageListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                if (scrollState !=0){
+                if (scrollState != 0) {
                     InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     in.hideSoftInputFromWindow(absListView.getApplicationWindowToken(), 0);
                 }
@@ -209,11 +206,11 @@ public class UserToUserMessageNotification extends AppCompatActivity {
                 }
 
                 //Creating a message
-                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
+                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReference.push().setValue(userMessage);
 
-                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
+                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
                 //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                 mMessagesDatabaseReferenceSecondName.push().setValue(userMessage2);
 
@@ -257,10 +254,10 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(),UserDetails.usernameID);
+                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(), UserDetails.usernameID);
                     mMessagesDatabaseReference.push().setValue(userMessage);
 
-                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(),UserDetails.usernameID);
+                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
                     //The push method is exactly what you want to be using in this case because you need a new id generated for each message
                     mMessagesDatabaseReferenceSecondName.push().setValue(userMessage2);
 
@@ -271,113 +268,116 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
     private void attachDatabaseReadListenerDeliveryStatus() {
 
-            // Child event listener
-            mDeliveryChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        // Child event listener
+        mDeliveryChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    String datasnapshoti = dataSnapshot.getKey();
+                String datasnapshoti = dataSnapshot.getKey();
+                if (!UserDetails.username.equals(null) && !UserDetails.usernameID.equals(null) && !UserDetails.UserChatsWith.equals(null) && !UserDetails.UserChatsWithID.equals(null)) {
                     mMessagesDatabaseReference.child(datasnapshoti).child("isReaded").setValue("true");
-
-                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.getKey();
-                    Log.e("datasnapsot", datasnapshoti + "----" + datasnapshotOfLastMessage);
-
-                    mMessageAdapter.notifyDataSetChanged();
-
                 }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    mMessageAdapter.notifyDataSetChanged();
 
-                }
+                String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.getKey();
+                Log.e("datasnapsot", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                mMessageAdapter.notifyDataSetChanged();
 
-                }
+            }
 
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                mMessageAdapter.notifyDataSetChanged();
 
-                }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                }
-            };
+            }
 
-            mMessagesDatabaseReference.addChildEventListener(mDeliveryChildEventListener);
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mMessagesDatabaseReference.addChildEventListener(mDeliveryChildEventListener);
 
 
     }
 
     private void attachDatabaseReadListenertoListView() {
 
-            // Child event listener
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        // Child event listener
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+                UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
 
-                    userMessages.add(userMessagee);
+                userMessages.add(userMessagee);
 
-                    mMessageAdapter.notifyDataSetChanged();
+                mMessageAdapter.notifyDataSetChanged();
 
-                    String datasnapshoti = dataSnapshot.getKey();
-                    String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.getKey();
-                    Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
+                String datasnapshoti = dataSnapshot.getKey();
+                String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.getKey();
+                Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);
 
-                    if(userMessagee.getName().equals(UserDetails.UserChatsWith)){
-                        float log1=(float)(Math.log(maxVolume-currVolume)/Math.log(maxVolume));
-                        mMediaPlayer.setVolume(1-log1,1-log1);
-                        mMediaPlayer.start();
+                if (userMessagee.getName().equals(UserDetails.UserChatsWith)) {
+                    float log1 = (float) (Math.log(maxVolume - currVolume) / Math.log(maxVolume));
+                    mMediaPlayer.setVolume(1 - log1, 1 - log1);
+                    mMediaPlayer.start();
 
-                    }else if(userMessagee.getName().equals(UserDetails.username)){
-                        float log2=(float)(Math.log(maxVolume-currVolume2)/Math.log(maxVolume));
-                        mMediaPlayer2.setVolume(1-log2,1-log2);
-                        mMediaPlayer2.start();
+                } else if (userMessagee.getName().equals(UserDetails.username)) {
+                    float log2 = (float) (Math.log(maxVolume - currVolume2) / Math.log(maxVolume));
+                    mMediaPlayer2.setVolume(1 - log2, 1 - log2);
+                    mMediaPlayer2.start();
 
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                userMessages.remove(userMessages.size() - 1);
+
+                UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+
+                userMessages.add(userMessagee);
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mMessageAdapter.notifyDataSetChanged();
                     }
+                });
 
-                }
+            }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                    userMessages.remove(userMessages.size() - 1);
+            }
 
-                    UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                    userMessages.add(userMessagee);
+            }
 
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            mMessageAdapter.notifyDataSetChanged();
-                        }
-                    });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
+            }
+        };
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-
-            mMessagesDatabaseReferenceSecondName.addChildEventListener(mChildEventListener);
+        mMessagesDatabaseReferenceSecondName.addChildEventListener(mChildEventListener);
 
     }
 
@@ -391,8 +391,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         super.onResume();
 
         SharedPreferences mUsersInfoNotification = PreferenceManager.getDefaultSharedPreferences(UserToUserMessageNotification.this);
-        UserDetails.UserChatsWith = mUsersInfoNotification.getString("userChatsWithuserChatsWith","");
-        UserDetails.UserChatsWithID = mUsersInfoNotification.getString("userChatsWithIDuserChatsWithID","");
+        UserDetails.UserChatsWith = mUsersInfoNotification.getString("userChatsWithuserChatsWith", "");
+        UserDetails.UserChatsWithID = mUsersInfoNotification.getString("userChatsWithIDuserChatsWithID", "");
 
         //to read messages for discovering/refreshing the delivery status
         attachDatabaseReadListenerDeliveryStatus();
@@ -402,8 +402,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         isActiveNotification = true;
 
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(UserDetails.UserChatsWith,1);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(UserDetails.UserChatsWith, 1);
 
     }
 
