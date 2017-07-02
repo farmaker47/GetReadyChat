@@ -118,7 +118,7 @@ public class UserToUserMessage extends AppCompatActivity {
         mSendButton = (Button) findViewById(R.id.sendButton);
         emptyLinearLayout = (LinearLayout) findViewById(R.id.emptyLinearLayout);
         mFrameLayout = (FrameLayout) findViewById(R.id.frameLayout);
-        mFrameLayout.setBackgroundResource(R.drawable.round2);
+        mFrameLayout.setBackgroundResource(R.drawable.round3);
 
         // Initialize message ListView and its adapter
         userMessages = new ArrayList<>();
@@ -169,10 +169,10 @@ public class UserToUserMessage extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() > 0) {
                     mSendButton.setEnabled(true);
-                    mFrameLayout.setBackgroundResource(R.drawable.round3);
+                    mFrameLayout.setBackgroundResource(R.drawable.round2);
                 } else {
                     mSendButton.setEnabled(false);
-                    mFrameLayout.setBackgroundResource(R.drawable.round2);
+                    mFrameLayout.setBackgroundResource(R.drawable.round3);
                 }
             }
 
