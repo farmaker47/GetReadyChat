@@ -1,6 +1,7 @@
 package com.george.getreadychat;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -27,12 +28,12 @@ public class UserMessageAdapterBubbles extends ArrayAdapter<UserMessage> {
         super(context, resource, objects);
         this.activity = context;
         this.objects = objects;
-
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
 
         UserMessage message = getItem(position);
         int viewType = getItemViewType(position);
