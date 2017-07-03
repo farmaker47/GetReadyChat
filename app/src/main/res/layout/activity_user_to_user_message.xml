@@ -41,7 +41,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/linearLayout"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
+        android:dividerHeight="15dp"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
         tools:listitem="@layout/item_message"
