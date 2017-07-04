@@ -223,6 +223,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             }
         });
 
+        Toast.makeText(UserToUserMessageNotification.this, "onCreateNotifii", Toast.LENGTH_LONG).show();
+
+
     }
 
     @Override
@@ -386,7 +389,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Toast.makeText(UserToUserMessageNotification.this, "onStartNotifii", Toast.LENGTH_LONG).show();
     }
+
 
     @Override
     protected void onResume() {
@@ -396,16 +401,19 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         UserDetails.UserChatsWith = mUsersInfoNotification.getString("userChatsWithuserChatsWith", "");
         UserDetails.UserChatsWithID = mUsersInfoNotification.getString("userChatsWithIDuserChatsWithID", "");
 
-        //to read messages for discovering/refreshing the delivery status
-        attachDatabaseReadListenerDeliveryStatus();
 
         //for loading messages to the listview
         attachDatabaseReadListenertoListView();
+
+        //to read messages for discovering/refreshing the delivery status
+        attachDatabaseReadListenerDeliveryStatus();
 
         isActiveNotification = true;
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(UserDetails.UserChatsWith, 1);
+
+        Toast.makeText(UserToUserMessageNotification.this, "onResumeNotifii", Toast.LENGTH_LONG).show();
 
     }
 
@@ -419,6 +427,8 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         super.onPause();
         isActiveNotification = false;
+        Toast.makeText(UserToUserMessageNotification.this, "onPauseNotifii", Toast.LENGTH_LONG).show();
+
     }
 
 
@@ -432,6 +442,13 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             mDeliveryChildEventListener = null;*/
         }
         super.onStop();
+        Toast.makeText(UserToUserMessageNotification.this, "onStopNotifii", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(UserToUserMessageNotification.this, "onDestroyNotifii", Toast.LENGTH_LONG).show();
     }
 
     @Override

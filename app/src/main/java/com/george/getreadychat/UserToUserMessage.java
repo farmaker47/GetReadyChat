@@ -382,22 +382,21 @@ public class UserToUserMessage extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-
-        //to read messages for discovering/refreshing the delivery status
-        attachDatabaseReadListenerDeliveryStatus();
-
-        //for loading messages to the listview
-        attachDatabaseReadListenertoListView();
-
-
         super.onResume();
-        isActive = true;
-
-        mMessageAdapter.notifyDataSetChanged();
 
         SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
         UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser","");
         UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID","");
+
+        //for loading messages to the listview
+        attachDatabaseReadListenertoListView();
+
+        //to read messages for discovering/refreshing the delivery status
+        attachDatabaseReadListenerDeliveryStatus();
+
+        isActive = true;
+
+        mMessageAdapter.notifyDataSetChanged();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(UserDetails.secondUser, 1);
