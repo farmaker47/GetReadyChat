@@ -16,15 +16,12 @@
 
         <TextView
             android:id="@+id/messageTextView"
-            tools:text="Message"
-            style="@style/textViewMessage" />
+            style="@style/textViewMessage"
+            tools:text="Message" />
 
         <ImageView
             android:id="@+id/photoImageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
+            style="@style/imageViewStyle" />
 
 
         <LinearLayout
@@ -37,6 +34,7 @@
                 android:id="@+id/nameTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:layout_weight="1.5"
                 android:minWidth="100dp"
                 android:textAlignment="center"
@@ -50,7 +48,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:minWidth="100dp"
-                android:textAlignment="textEnd"
+                android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:text="Dey,3 Ioul,19.21" />
 
@@ -59,7 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_weight="1"
+                android:layout_weight="0.01"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:text="Seen" />

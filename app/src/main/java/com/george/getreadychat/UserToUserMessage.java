@@ -459,7 +459,7 @@ public class UserToUserMessage extends AppCompatActivity {
     }
 
     private String getTheDateTime() {
-        DateFormat df = new SimpleDateFormat("EEE, d MMM, HH:mm");
+        DateFormat df = new SimpleDateFormat("EEE d MMM,  HH:mm");
         String date = df.format(Calendar.getInstance().getTime());
         return date;
     }

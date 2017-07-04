@@ -23,10 +23,7 @@
 
         <ImageView
             android:id="@+id/photoImageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
+            style="@style/imageViewStyle" />
 
 
         <LinearLayout
