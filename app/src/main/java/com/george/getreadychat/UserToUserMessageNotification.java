@@ -274,7 +274,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 String datasnapshoti = dataSnapshot.getKey();
-                if (!UserDetails.username.equals(null) && !UserDetails.usernameID.equals(null) && !UserDetails.UserChatsWith.equals(null) && !UserDetails.UserChatsWithID.equals(null)) {
+                if (!UserDetails.username.equals(null) && !UserDetails.usernameID.equals(null) &&
+                        !UserDetails.UserChatsWith.equals(null) && !UserDetails.UserChatsWithID.equals(null) && !datasnapshoti.equals(null)) {
+
                     mMessagesDatabaseReference.child(datasnapshoti).child("isReaded").setValue("true");
                 }
 

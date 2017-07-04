@@ -37,7 +37,7 @@
                 android:layout_gravity="start"
                 android:layout_weight="1.5"
                 android:minWidth="100dp"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:text="Name" />
 

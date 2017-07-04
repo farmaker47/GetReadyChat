@@ -266,8 +266,11 @@ public class UserToUserMessage extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 String datasnapshoti = dataSnapshot.getKey();
-                if(!UserDetails.username.equals(null) && !UserDetails.usernameID.equals(null) && !UserDetails.secondUser.equals(null) && !UserDetails.secondUserID.equals(null)){
-                    mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).child(datasnapshoti).child("isReaded").setValue("true");
+                if(!UserDetails.username.equals(null) && !UserDetails.usernameID.equals(null) &&
+                        !UserDetails.secondUser.equals(null) && !UserDetails.secondUserID.equals(null) && !datasnapshoti.equals(null)){
+
+                    mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser)
+                            .child(UserDetails.secondUserID).child(datasnapshoti).child("isReaded").setValue("true");
                 }
 
                 String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).getKey();

@@ -75,7 +75,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         // If there is a network connection, fetch data
         if (networkInfo == null) {
-            Toast.makeText(MapsActivity.this, getResources().getString(R.string.NoInternet), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MapsActivity.this, getResources().getString(R.string.NoInternet), Toast.LENGTH_LONG).show();
         }
 
         markerMap = new HashMap<String, String>();
