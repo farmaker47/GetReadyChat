@@ -94,6 +94,10 @@ public class UserToUserMessage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_to_user_message);
 
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
+        UserDetails.username = mUsernameInfo.getString("usernameusername", "");
+        UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
+
         SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
         UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser","");
         UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID","");
@@ -384,6 +388,10 @@ public class UserToUserMessage extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
+        UserDetails.username = mUsernameInfo.getString("usernameusername", "");
+        UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
+
         SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
         UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser","");
         UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID","");
@@ -406,12 +414,15 @@ public class UserToUserMessage extends AppCompatActivity {
     @Override
     protected void onPause() {
 
-        mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).removeEventListener(mDeliveryChildEventListener);
-        mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).removeEventListener(mChildEventListener);
-        /*mChildEventListener = null;
-        mDeliveryChildEventListener = null;*/
+        if (mChildEventListener != null) {
+            mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).removeEventListener(mDeliveryChildEventListener);
+            mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).removeEventListener(mChildEventListener);
+            /*mChildEventListener = null;
+            mDeliveryChildEventListener = null;*/
+        }
 
         super.onPause();
+        mMessageAdapter.clear();
         isActive = false;
 
     }
@@ -419,13 +430,6 @@ public class UserToUserMessage extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-
-        if (mChildEventListener != null) {
-            mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).removeEventListener(mDeliveryChildEventListener);
-            mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).removeEventListener(mChildEventListener);
-            /*mChildEventListener = null;
-            mDeliveryChildEventListener = null;*/
-        }
         super.onStop();
         isActive = false;
 
@@ -436,6 +440,8 @@ public class UserToUserMessage extends AppCompatActivity {
         super.onDestroy();
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

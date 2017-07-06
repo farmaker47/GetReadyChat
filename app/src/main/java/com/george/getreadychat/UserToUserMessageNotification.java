@@ -102,6 +102,10 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         UserDetails.UserChatsWithID = intent.getStringExtra("chatsWithID");
         Log.e("UserChatsWith", UserDetails.UserChatsWith + UserDetails.UserChatsWithID);
 
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessageNotification.this);
+        UserDetails.username = mUsernameInfo.getString("usernameusername", "");
+        UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
+
         SharedPreferences mUsersInfoNotification = PreferenceManager.getDefaultSharedPreferences(UserToUserMessageNotification.this);
         SharedPreferences.Editor editor = mUsersInfoNotification.edit();
         editor.putString("userChatsWithuserChatsWith", UserDetails.UserChatsWith);
@@ -223,9 +227,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(UserToUserMessageNotification.this, "onCreateNotifii", Toast.LENGTH_LONG).show();
-
-
     }
 
     @Override
@@ -322,8 +323,15 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         // Child event listener
         mChildEventListener = new ChildEventListener() {
+
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
 
@@ -389,7 +397,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(UserToUserMessageNotification.this, "onStartNotifii", Toast.LENGTH_LONG).show();
     }
 
 
@@ -401,6 +408,9 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         UserDetails.UserChatsWith = mUsersInfoNotification.getString("userChatsWithuserChatsWith", "");
         UserDetails.UserChatsWithID = mUsersInfoNotification.getString("userChatsWithIDuserChatsWithID", "");
 
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessageNotification.this);
+        UserDetails.username = mUsernameInfo.getString("usernameusername", "");
+        UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
 
         //for loading messages to the listview
         attachDatabaseReadListenertoListView();
@@ -410,10 +420,10 @@ public class UserToUserMessageNotification extends AppCompatActivity {
 
         isActiveNotification = true;
 
+        mMessageAdapter.notifyDataSetChanged();
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(UserDetails.UserChatsWith, 1);
-
-        Toast.makeText(UserToUserMessageNotification.this, "onResumeNotifii", Toast.LENGTH_LONG).show();
 
     }
 
@@ -426,29 +436,20 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         mDeliveryChildEventListener = null;*/
 
         super.onPause();
+        mMessageAdapter.clear();
         isActiveNotification = false;
-        Toast.makeText(UserToUserMessageNotification.this, "onPauseNotifii", Toast.LENGTH_LONG).show();
 
     }
 
 
     @Override
     protected void onStop() {
-
-        if (mChildEventListener != null) {
-            mMessagesDatabaseReference.removeEventListener(mDeliveryChildEventListener);
-            mMessagesDatabaseReferenceSecondName.removeEventListener(mChildEventListener);
-            /*mChildEventListener = null;
-            mDeliveryChildEventListener = null;*/
-        }
         super.onStop();
-        Toast.makeText(UserToUserMessageNotification.this, "onStopNotifii", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(UserToUserMessageNotification.this, "onDestroyNotifii", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -458,6 +459,7 @@ public class UserToUserMessageNotification extends AppCompatActivity {
         isActiveNotification = true;
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

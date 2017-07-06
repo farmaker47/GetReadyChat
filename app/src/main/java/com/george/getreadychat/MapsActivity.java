@@ -69,6 +69,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+        UserDetails.username = mUsernameInfo.getString("usernameusername", "");
+        UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
+
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         // Get details on the currently active default data
@@ -263,6 +267,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onResume() {
         super.onResume();
+
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+        UserDetails.username = mUsernameInfo.getString("usernameusername", "");
+        UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
+
         setupMapIfNeeded();
         attachListenerForNotifications();
     }

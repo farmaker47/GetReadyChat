@@ -53,6 +53,10 @@ public class TotalMessages extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_total_messages);
 
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(TotalMessages.this);
+        UserDetails.username = mUsernameInfo.getString("usernameusername", "");
+        UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
+
         mMessageListView = (ListView) findViewById(R.id.allMessageListView);
         emptyLinearLayout = (LinearLayout) findViewById(R.id.emptyLinearLayout);
 
@@ -138,6 +142,11 @@ public class TotalMessages extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(TotalMessages.this);
+        UserDetails.username = mUsernameInfo.getString("usernameusername", "");
+        UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
+
         attachDatabaseReadListener();
     }
 

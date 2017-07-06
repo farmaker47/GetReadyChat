@@ -1,7 +1,9 @@
 package com.george.getreadychat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -120,6 +122,13 @@ public class IntroScreen extends AppCompatActivity {
 
         UserDetails.username = username;
         UserDetails.usernameID = usernameId;
+
+        SharedPreferences mUsernameInfo = PreferenceManager.getDefaultSharedPreferences(IntroScreen.this);
+        SharedPreferences.Editor editor = mUsernameInfo.edit();
+        editor.putString("usernameusername", UserDetails.username);
+        editor.putString("usernameIDusernameID", UserDetails.usernameID);
+        editor.commit();
+
         Log.e("usernameInDetails", UserDetails.username + UserDetails.usernameID);
 
     }
