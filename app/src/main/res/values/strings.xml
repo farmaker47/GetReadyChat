@@ -8,11 +8,11 @@
     <string name="back_totalmessages">Total Messages</string>
     <string name="privateMessage">Private message:</string>
     <string name="totalMessages">Total Messages:</string>
-    <string name="readed">Seen</string>
+    <string name="readed">✔</string>
     <string name="textViewEmptyListview">Waiting to begin conversation or loading data!</string>
     <string name="textViewEmptyTotal">Waiting to load conversations</string>
     <string name="title_activity_user_to_user_message_notification">UserToUserMessageNotification</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Map with pharmacies</string>
     <string name="title_activity_intro_screen">IntroScreen</string>
     <string name="dialogYes">Yes</string>
     <string name="dialogCancel">Cancel</string>
@@ -21,4 +21,5 @@
     <string name="NoInternet">No internet access!!</string>
     <string name="deleteConversation">Delete Conversation??</string>
     <string name="permanentDelete">This action will permanently delete messages for both sender and receiver</string>
+    <string name="pharmacy">Pharmacy</string>
 </resources>

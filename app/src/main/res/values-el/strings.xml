@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GetReadyChat</string>
+    <string name="NoInternet">Χωρίς σύνδεση στο ίντερνετ</string>
+    <string name="action_settings">Όλα τα μηνύματα</string>
+    <string name="back_totalmessages">Όλες οι συνομιλίες</string>
+    <string name="deleteConversation">Διαγραφή συνομιλίας??</string>
+    <string name="dialogCancel">Ακύρωση</string>
+    <string name="dialogYes">Ναι</string>
+    <string name="permanentDelete">Αυτή η λειτουργία θα διαγράψει τα μηνύματα και στους δύο συνομιλητές</string>
+    <string name="privateMessage">Προσωπικό μήνυμα</string>
+    <string name="readed">✔</string>
+    <string name="send_button_label">Αποστολή</string>
+    <string name="signInOK">Συνδεθήκατε!!</string>
+    <string name="signNOT">Η σύνδεση απέτυχε!</string>
+    <string name="sign_out">Αποσύνδεση!</string>
+    <string name="stringMyName">Εγώ:</string>
+    <string name="textViewEmptyListview">Αναμονή για έναρξη συνομιλίας ή φόρτωση μηνυμάτων</string>
+    <string name="textViewEmptyTotal">Αναμονή για φόρτωση συνομιλιών</string>
+    <string name="title_activity_intro_screen">Οθόνη</string>
+    <string name="title_activity_maps">Χάρτης με φαρμακεία</string>
+    <string name="title_activity_user_to_user_message_notification">Οθόνη ειδοποιήσεων</string>
+    <string name="totalMessages">Όλες οι συνομιλίες:</string>
+    <string name="uploading_image">Εκκίνηση μεταφόρτωσης εικόνας</string>
+    <string name="pharmacy">Φαρμακείο</string>
+</resources>

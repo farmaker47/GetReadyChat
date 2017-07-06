@@ -173,7 +173,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng farmakeioGS = new LatLng(37.297319, 21.701375);
         farmakeioGeorgeSoloupis = mMap.addMarker(new MarkerOptions()
                 .position(farmakeioGS)
-                .title("Φαρμακείο")
+                .title(getResources().getString(R.string.pharmacy))
                 .snippet("Γεώργιου Σολούπη")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
 
@@ -185,7 +185,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng farmakeioMV = new LatLng(40.871234, 22.909053);
         farmakeioMariaVakalopoulou = mMap.addMarker(new MarkerOptions()
                 .position(farmakeioMV)
-                .title("Φαρμακείο")
+                .title(getResources().getString(R.string.pharmacy))
                 .snippet("Μαρία Βακαλοπούλου")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.pharm)));
 
