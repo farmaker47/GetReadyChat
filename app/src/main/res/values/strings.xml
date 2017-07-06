@@ -12,7 +12,7 @@
     <string name="textViewEmptyListview">Waiting to begin conversation or loading data!</string>
     <string name="textViewEmptyTotal">Waiting to load conversations</string>
     <string name="title_activity_user_to_user_message_notification">UserToUserMessageNotification</string>
-    <string name="title_activity_maps">Map with pharmacies</string>
+    <string name="title_activity_maps">Map</string>
     <string name="title_activity_intro_screen">IntroScreen</string>
     <string name="dialogYes">Yes</string>
     <string name="dialogCancel">Cancel</string>

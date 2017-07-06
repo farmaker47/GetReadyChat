@@ -18,7 +18,7 @@
     <string name="textViewEmptyListview">Αναμονή για έναρξη συνομιλίας ή φόρτωση μηνυμάτων</string>
     <string name="textViewEmptyTotal">Αναμονή για φόρτωση συνομιλιών</string>
     <string name="title_activity_intro_screen">Οθόνη</string>
-    <string name="title_activity_maps">Χάρτης με φαρμακεία</string>
+    <string name="title_activity_maps">Χάρτης φαρμακείων</string>
     <string name="title_activity_user_to_user_message_notification">Οθόνη ειδοποιήσεων</string>
     <string name="totalMessages">Όλες οι συνομιλίες:</string>
     <string name="uploading_image">Εκκίνηση μεταφόρτωσης εικόνας</string>

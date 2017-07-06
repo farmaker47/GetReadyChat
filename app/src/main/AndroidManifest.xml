@@ -45,7 +45,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".IntroScreen"/>
         <activity
             android:name=".IntroScreen"
             android:label="@string/title_activity_intro_screen"
