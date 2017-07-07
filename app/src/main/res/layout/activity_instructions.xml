@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Όροι και Προϋποθέσεις"
+        android:text="@string/instructions"
         android:textAlignment="center"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="@string/instructionsUse"
-            android:textAlignment="center"/>
+            android:textAlignment="gravity"
+            android:gravity="start" />
     </ScrollView>
 </LinearLayout>
