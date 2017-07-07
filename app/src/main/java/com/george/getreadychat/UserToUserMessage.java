@@ -88,6 +88,8 @@ public class UserToUserMessage extends AppCompatActivity {
     private int maxVolume;
     private int currVolume, currVolume2;
 
+    private MapsActivity mMapsListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,6 +220,8 @@ public class UserToUserMessage extends AppCompatActivity {
                 in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);*/
             }
         });
+
+        mMapsListener = new MapsActivity();
 
     }
 
@@ -408,6 +412,8 @@ public class UserToUserMessage extends AppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(UserDetails.secondUser, 1);
+
+        /*mMapsListener.attachListenerForNotifications();*/
 
     }
 

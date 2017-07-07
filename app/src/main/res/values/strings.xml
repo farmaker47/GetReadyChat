@@ -22,4 +22,9 @@
     <string name="deleteConversation">Delete Conversation??</string>
     <string name="permanentDelete">This action will permanently delete messages for both sender and receiver</string>
     <string name="pharmacy">Pharmacy</string>
+    <string name="instructions">Instructions</string>
+    <string name="instructionsUse">ΜΕ ΤΟ ΚΑΤΕΒΑΣΜΑ ΚΑΙ ΤΗ ΧΡΗΣΗ ΤΗΣ ΕΦΑΡΜΟΓΗΣ ΚΑΘΕ ΧΡΗΣΤΗΣ Ή ΕΤΑΙΡΙΑ ΑΠΟΔΕΧΕΤΑΙ ΚΑΙ ΣΥΜΦΩΝΕΙ ΜΕ ΤΟΥΣ ΠΑΡΑΚΑΤΩ ΟΡΟΥΣ ΚΑΙ ΠΡΟΥΠΟΘΕΣΕΙΣ\n\n
+    Α.Η άδεια χρήσης του τελικού χρήστη/εταιρίας είναι νόμιμη συμφωνία μεταξύ του προγραμματιστή που ανέβασε την εφαρμογή στο Google shop και του χρήστη/εταιρίας.
+    Με την εγκατάσταση της εφαρμογής ο κάθε χρήστης/εταιρία συμφωνεί με τους όρους και προυποθέσεις αυτής της συμφωνίας που ακολουθούν:\n\n
+    </string>
 </resources>

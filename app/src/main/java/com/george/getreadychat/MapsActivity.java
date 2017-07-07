@@ -307,7 +307,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_total_messages, menu);
+        getMenuInflater().inflate(R.menu.menu_map, menu);
         return true;
     }
 
@@ -322,13 +322,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent intentToTotalMessages = new Intent(MapsActivity.this, TotalMessages.class);
                 startActivity(intentToTotalMessages);
                 return true;
+            case R.id.instructions:
+                Intent intentToInstructions = new Intent(MapsActivity.this, Instructions.class);
+                startActivity(intentToInstructions);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
 
-    private void attachListenerForNotifications() {
+    public void attachListenerForNotifications() {
 
         if (mValueEventListener == null) {
             Log.e("attachlistener", "executed");
