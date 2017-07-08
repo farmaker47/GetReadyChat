@@ -24,8 +24,42 @@
     <string name="pharmacy">Pharmacy</string>
     <string name="screenInstructions"> Instructions screen</string>
     <string name="instructions">Instructions</string>
-    <string name="instructionsUse">ΜΕ ΤΟ ΚΑΤΕΒΑΣΜΑ ΚΑΙ ΤΗ ΧΡΗΣΗ ΤΗΣ ΕΦΑΡΜΟΓΗΣ ΚΑΘΕ ΧΡΗΣΤΗΣ Ή ΕΤΑΙΡΙΑ ΑΠΟΔΕΧΕΤΑΙ ΚΑΙ ΣΥΜΦΩΝΕΙ ΜΕ ΤΟΥΣ ΠΑΡΑΚΑΤΩ ΟΡΟΥΣ ΚΑΙ ΠΡΟΥΠΟΘΕΣΕΙΣ\n\n
-    Α.Η άδεια χρήσης του τελικού χρήστη/εταιρίας είναι νόμιμη συμφωνία μεταξύ του προγραμματιστή που ανέβασε την εφαρμογή στο Google shop και του χρήστη/εταιρίας.
-    Με την εγκατάσταση της εφαρμογής ο κάθε χρήστης/εταιρία συμφωνεί με τους όρους και προυποθέσεις αυτής της συμφωνίας που ακολουθούν:\n\n
+    <string name="instructionsUse">
+        Α. For patients:\n\n\t
+        The application use of finding a pharmacy on map and STARTING A DIRECT CONVERSATION in form of chat, has a primary purpose to help patients find their medicine that is
+        a long time out of stock. This way patients get in touch immediately and effortlessly with different pharmacies across Greece where probably some boxes of the medicine still
+        exist and they save money wondering around!\n\t
+        On Map there are only pharmacies that operate legally. Pressing on the desired spot an info window opens with the details of the pharmacy and down below 2 google map buttons.
+        With the last buttons you can navigate to the specific pharmacy with google maps app. If you press at the info window a second screen opens where you can send a direct message
+        to the pharmacy. Every chat balloon has information about the time of the message, the users and a check mark that indicates that the massage has been seen.\n\t  Messages are strictly personal
+        and no one except you and the specific pharmacy can see the messages. In any case you want to erase the conversation, you can do it by long click the specific conversation in Total Messages
+        screen. With the last action you erase completely all messages in your account and the account of the pharmacy.\n\n\t
+        Please do regular updates of the application to find every time more pharmacies where you can place questions.\n\n\n
+
+        B. For pharmacies:\n\n\t
+        The application use of finding a pharmacy on map and STARTING A DIRECT CONVERSATION in form of chat, has a primary purpose to help patients find their medicine that is
+        a long time out of stock. This way patients get in touch immediately and effortlessly with different pharmacies across Greece where probably some boxes of the medicine still
+        exist and they save money wondering around!\n\t
+        I invite you to make a big network of pharmacies where patients can find pharmacies on a google map and immediately start a conversation about their out of stock medicine. On the map
+         there will be constantly new pharmacies/spots that they are willing to participate and of course to answer patient messages that despite the fact that they will have a username,
+        they will be at most cases totally strangers. Pharmacies can also forward the app to their already known patients so they can be always in touch with the pharmacy.\n\t The way that a new pharmacy
+        gets on the map is really easy. Find on the map the android icon at Greece/Messinia region and send a immediate simple message. This way the programmer sees your message and asks you for
+        information so he can get in touch with the pharmacy to verify that it operates legally. Every pharmacy has a username, a gmail and a 28digit auto generated code that is created at the procedure
+        of the log in. With these 3 codes only the pharmacy that is at the specific spot will have access to its messages (messages are strictly private).
+        Pharmacies can contact other pharmacies on map but they cannot find unknown new customers/patients.\n\t Please keep conversations to a professional level, this way we get from public the respect that
+        all pharmacists deserve. Always the pharmacist is known for his great service to the public, with this application he can prove it once more!!\n\n\t
+
+        For every information or problem you can send message to the android icon at Messinia region. The basic screen that all functions start working is the map screen and there you have
+        to return if a problem occurs. In special problem send mail to the specified at the first main screen of the app with the navigation drawer.\n\n\t
+
+        The programmer is not responsible for wrong use of the application and the problems that will occur from this use. Also the programmer cannot know the kind of messages that
+        are exchanged between the users that is why he urges users to keep it professional.\n\n\t
+
+        Lets make a big network of pharmacies starting with 100 the first year!\n\n\t
+
+        Thank you.
+
+
+
     </string>
 </resources>

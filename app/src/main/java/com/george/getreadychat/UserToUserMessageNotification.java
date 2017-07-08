@@ -327,12 +327,6 @@ public class UserToUserMessageNotification extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
                 UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
 
                 userMessages.add(userMessagee);
