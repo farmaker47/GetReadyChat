@@ -447,7 +447,12 @@ public class UserToUserMessage extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent toMapActivity = new Intent(UserToUserMessage.this,MapsActivity.class);
+        startActivity(toMapActivity);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

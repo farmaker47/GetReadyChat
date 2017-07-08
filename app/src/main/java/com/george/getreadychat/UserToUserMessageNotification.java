@@ -447,6 +447,13 @@ public class UserToUserMessageNotification extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent toMapActivity = new Intent(UserToUserMessageNotification.this,MapsActivity.class);
+        startActivity(toMapActivity);
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 

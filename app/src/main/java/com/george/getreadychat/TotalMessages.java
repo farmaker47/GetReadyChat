@@ -150,6 +150,12 @@ public class TotalMessages extends AppCompatActivity {
         attachDatabaseReadListener();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent toMapActivity = new Intent(TotalMessages.this,MapsActivity.class);
+        startActivity(toMapActivity);
+    }
 
     private void attachDatabaseReadListener() {
         if (mChildEventListener == null) {
