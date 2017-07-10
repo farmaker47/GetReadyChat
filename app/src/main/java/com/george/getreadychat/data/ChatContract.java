@@ -12,6 +12,7 @@ public class ChatContract {
     public static final class FarmakeioGeorgioSoloupi {
         public static final String FARMAKEIO_NAME = "george soloupis";
         public static final String FARMAKEIO_KEY = "rZf3W3y9RuOQ26kyq3CiVKtyUnK2";
+        public static final String FARMAKEIO_INFO_WINDOW = "Γεώργιου Σολούπη";
 
     }
 

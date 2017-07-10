@@ -51,6 +51,8 @@ dependencies {
 
     compile 'com.google.maps.android:android-maps-utils:0.5+'
 
+    compile 'com.android.support:multidex:1.0.1'
+
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

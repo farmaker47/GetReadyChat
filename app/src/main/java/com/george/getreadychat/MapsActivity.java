@@ -174,7 +174,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         farmakeioGeorgeSoloupis = mMap.addMarker(new MarkerOptions()
                 .position(farmakeioGS)
                 .title(getResources().getString(R.string.pharmacy))
-                .snippet("Γεώργιου Σολούπη")
+                .snippet(ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_INFO_WINDOW)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 7));
@@ -224,8 +224,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     editor.putString("secondUserIDsecondUserID", ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY);
                     editor.commit();
 
-                    /*UserDetails.secondUser = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_NAME;
-                    UserDetails.secondUserID = ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_KEY;*/
                 }
 
                 if (m.equals(ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME)) {
