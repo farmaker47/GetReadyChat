@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="emtyTextView">20sp</dimen>
     <dimen name="messageTextView">20sp</dimen>
+    <dimen name="textHit">12sp</dimen>
 </resources>

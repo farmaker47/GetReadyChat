@@ -58,8 +58,6 @@
         Lets make a big network of pharmacies starting with 100 the first year!\n\n\t
 
         Thank you.
-
-
-
     </string>
+    <string name="hitForMessage">Hit for instant message</string>
 </resources>

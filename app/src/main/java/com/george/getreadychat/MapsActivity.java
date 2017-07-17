@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.george.getreadychat.data.ChatContract;
@@ -173,8 +174,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng farmakeioGS = new LatLng(37.297319, 21.701375);
         farmakeioGeorgeSoloupis = mMap.addMarker(new MarkerOptions()
                 .position(farmakeioGS)
-                .title(getResources().getString(R.string.pharmacy))
-                .snippet(ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_INFO_WINDOW)
+                .title(ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_INFO_WINDOW)
+                .snippet(ChatContract.FarmakeioGeorgioSoloupi.FARMAKEIO_INFO_TELEPHONE)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.farmaker)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(farmakeioGS, 7));
@@ -279,21 +280,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         private View mWindow;
 
-
-        /*CustomInfoWindowAdapter() {
+        CustomInfoWindowAdapter() {
             mWindow = getLayoutInflater().inflate(R.layout.custom_info_window, null);
-            *//*mContents = getLayoutInflater().inflate(R.layout.custom_info_contents, null);*//*
-        }*/
+        }
 
         @Override
         public View getInfoWindow(Marker marker) {
-            if (marker.equals(farmakeioGeorgeSoloupis)) {
-                return null;
-            }
-            if (marker.equals(farmakeioMariaVakalopoulou)) {
-                return null;
-            }
-            return mWindow;
+                TextView markerTitle = ((TextView)mWindow.findViewById(R.id.titleInfoWindow));
+                markerTitle.setText(marker.getTitle());
+                /*TextView markerSnippet = ((TextView)mWindow.findViewById(R.id.snippetInfoWindow));
+                markerSnippet.setText(marker.getSnippet());*/
+
+                return mWindow;
+
         }
 
         @Override
