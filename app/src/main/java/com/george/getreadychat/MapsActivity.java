@@ -372,7 +372,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
-                                                    .setSmallIcon(R.drawable.ic_launcher)
+                                                    .setSmallIcon(R.drawable.ic_stat_notification_icon)
                                                     .setContentTitle(usermessageOfLast.getName() + ":")
                                                     .setContentText(usermessageOfLast.getText())
                                                     .setOnlyAlertOnce(true)
@@ -404,7 +404,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
-                                                    .setSmallIcon(R.drawable.ic_launcher)
+                                                    .setSmallIcon(R.drawable.ic_stat_notification_icon)
                                                     .setContentTitle(usermessageOfLast.getName() + ":")
                                                     .setContentText(usermessageOfLast.getText())
                                                     .setOnlyAlertOnce(true)
@@ -434,7 +434,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MapsActivity.this)
-                                                    .setSmallIcon(R.drawable.ic_launcher)
+                                                    .setSmallIcon(R.drawable.ic_stat_notification_icon)
                                                     .setContentTitle(usermessageOfLast.getName() + ":")
                                                     .setContentText(usermessageOfLast.getText())
                                                     .setOnlyAlertOnce(true)

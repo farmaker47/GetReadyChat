@@ -1,8 +1,5 @@
 package com.george.getreadychat.data;
 
-/**
- * Created by farmaker1 on 26/06/2017.
- */
 
 public class ChatContract {
 
