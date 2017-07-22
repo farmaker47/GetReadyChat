@@ -188,7 +188,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .position(farmakeioMV)
                 .title(getResources().getString(R.string.pharmacy))
                 .snippet("Μαρία Βακαλοπούλου")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pharm)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pharm_green)));
 
         id = farmakeioMariaVakalopoulou.getId();
         markerMap.put(id, ChatContract.FarmakeioMariaVakalopoulou.FARMAKEIO_NAME);
@@ -204,7 +204,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
 
-                farmakeioMariaVakalopoulou.setVisible(cameraPosition.zoom > 8);
+                farmakeioMariaVakalopoulou.setVisible(cameraPosition.zoom > 6);
 
             }
         });

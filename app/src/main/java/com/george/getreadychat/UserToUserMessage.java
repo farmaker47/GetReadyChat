@@ -1,6 +1,5 @@
 package com.george.getreadychat;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -75,10 +74,12 @@ public class UserToUserMessage extends AppCompatActivity {
     //A class that reference to spesific part of database
     private DatabaseReference mMessagesDatabaseReference;
     private DatabaseReference mMessagesDatabaseReferenceSecondName;
+    private DatabaseReference mMessagesDatabaseReferenceUsernameToUsername;
 
     //Child event listener to understand that has new messages
     private ChildEventListener mDeliveryChildEventListener;
     private ChildEventListener mChildEventListener;
+    private ChildEventListener mShopChildEventListener;
 
     //instance of firebase storage
     private FirebaseStorage mFirebaseStorage;
@@ -101,8 +102,8 @@ public class UserToUserMessage extends AppCompatActivity {
         UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
 
         SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
-        UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser","");
-        UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID","");
+        UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser", "");
+        UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID", "");
 
         //Instantiating the database..access point of the database reference
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -112,6 +113,8 @@ public class UserToUserMessage extends AppCompatActivity {
 
         //making the references
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child(UserDetails.username);
+        mMessagesDatabaseReferenceUsernameToUsername = mFirebaseDatabase.getReference().child(UserDetails.secondUser).child(UserDetails.secondUserID).child(UserDetails.secondUser)
+                .child(UserDetails.secondUserID);
         mMessagesDatabaseReferenceSecondName = mFirebaseDatabase.getReference().child(UserDetails.secondUser);
 
         //making the reference for the storage
@@ -201,16 +204,25 @@ public class UserToUserMessage extends AppCompatActivity {
                     Toast.makeText(UserToUserMessage.this, getResources().getString(R.string.NoInternet), Toast.LENGTH_LONG).show();
                 }
 
-                //Creating a message
-                UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
-                //The push method is exactly what you want to be using in this case because you need a new id generated for each message
-                mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).push().setValue(userMessage);
+
+                if (UserDetails.username.equals(UserDetails.secondUser)) {
+                    //Creating a message
+                    UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
+                    //The push method is exactly what you want to be using in this case because you need a new id generated for each message
+                    mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).push().setValue(userMessage);
+
+                } else {
+                    //Creating a message
+                    UserMessage userMessage = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
+                    //The push method is exactly what you want to be using in this case because you need a new id generated for each message
+                    mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).push().setValue(userMessage);
 
 
-                UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
-                //The push method is exactly what you want to be using in this case because you need a new id generated for each message
-                mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).push().setValue(userMessage2);
+                    UserMessage userMessage2 = new UserMessage(mMessageEditText.getText().toString(), UserDetails.username, null, null, getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
+                    //The push method is exactly what you want to be using in this case because you need a new id generated for each message
+                    mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).push().setValue(userMessage2);
 
+                }
 
                 // Clear input box
                 mMessageEditText.setText("");
@@ -254,13 +266,19 @@ public class UserToUserMessage extends AppCompatActivity {
 
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(), UserDetails.usernameID);
-                    mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).push().setValue(userMessage);
+                    if (UserDetails.username.equals(UserDetails.secondUser)) {
+                        UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(), UserDetails.usernameID);
+                        mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).push().setValue(userMessage);
 
-                    UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
-                    //The push method is exactly what you want to be using in this case because you need a new id generated for each message
-                    mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).push().setValue(userMessage2);
+                    } else {
+                        UserMessage userMessage = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.readed, getTimestampInMIliseconds(), UserDetails.usernameID);
+                        mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).push().setValue(userMessage);
 
+                        UserMessage userMessage2 = new UserMessage(null, UserDetails.username, null, downloadUrl.toString(), getTheDateTime(), UserDetails.notReaded, getTimestampInMIliseconds(), UserDetails.usernameID);
+                        //The push method is exactly what you want to be using in this case because you need a new id generated for each message
+                        mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).push().setValue(userMessage2);
+
+                    }
                 }
             });
         }
@@ -274,8 +292,8 @@ public class UserToUserMessage extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 String datasnapshoti = dataSnapshot.getKey();
-                if(!UserDetails.username.equals(null) && !UserDetails.usernameID.equals(null) &&
-                        !UserDetails.secondUser.equals(null) && !UserDetails.secondUserID.equals(null) && !datasnapshoti.equals(null)){
+                if (!UserDetails.username.equals(null) && !UserDetails.usernameID.equals(null) &&
+                        !UserDetails.secondUser.equals(null) && !UserDetails.secondUserID.equals(null) && !datasnapshoti.equals(null)) {
 
                     mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser)
                             .child(UserDetails.secondUserID).child(datasnapshoti).child("isReaded").setValue("true");
@@ -311,6 +329,75 @@ public class UserToUserMessage extends AppCompatActivity {
 
         mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).addChildEventListener(mDeliveryChildEventListener);
 
+
+    }
+
+    private void attachDatabaseReadListenerFromShop() {
+        // Child event listener
+        mShopChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+
+                userMessages.add(userMessagee);
+
+                mMessageAdapter.notifyDataSetChanged();
+
+               /* String datasnapshoti = dataSnapshot.getKey();
+                String datasnapshotOfLastMessage = mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).getKey();
+                Log.e("datasnapsotToListView", datasnapshoti + "----" + datasnapshotOfLastMessage);*/
+
+                if (userMessagee.getName().equals(UserDetails.secondUser)) {
+                    float log1 = (float) (Math.log(maxVolume - currVolume) / Math.log(maxVolume));
+                    mMediaPlayer.setVolume(1 - log1, 1 - log1);
+
+                    mMediaPlayer.start();
+
+                } else if (userMessagee.getName().equals(UserDetails.username)) {
+                    float log2 = (float) (Math.log(maxVolume - currVolume2) / Math.log(maxVolume));
+                    mMediaPlayer2.setVolume(1 - log2, 1 - log2);
+
+                    mMediaPlayer2.start();
+
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                userMessages.remove(userMessages.size() - 1);
+
+                UserMessage userMessagee = dataSnapshot.getValue(UserMessage.class);
+
+                userMessages.add(userMessagee);
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mMessageAdapter.notifyDataSetChanged();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mMessagesDatabaseReferenceUsernameToUsername.addChildEventListener(mShopChildEventListener);
 
     }
 
@@ -397,14 +484,22 @@ public class UserToUserMessage extends AppCompatActivity {
         UserDetails.usernameID = mUsernameInfo.getString("usernameIDusernameID", "");
 
         SharedPreferences mUsersInfo = PreferenceManager.getDefaultSharedPreferences(UserToUserMessage.this);
-        UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser","");
-        UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID","");
+        UserDetails.secondUser = mUsersInfo.getString("secondUsersecondUser", "");
+        UserDetails.secondUserID = mUsersInfo.getString("secondUserIDsecondUserID", "");
 
-        //for loading messages to the listview
-        attachDatabaseReadListenertoListView();
+        if (UserDetails.username.equals(UserDetails.secondUser)) {
+            attachDatabaseReadListenerFromShop();
+        } else {
+            //for loading the shop proposals
+            attachDatabaseReadListenerFromShop();
 
-        //to read messages for discovering/refreshing the delivery status
-        attachDatabaseReadListenerDeliveryStatus();
+            //for loading messages to the listview
+            attachDatabaseReadListenertoListView();
+
+            //to read messages for discovering/refreshing the delivery status
+            attachDatabaseReadListenerDeliveryStatus();
+        }
+
 
         isActive = true;
 
@@ -423,6 +518,7 @@ public class UserToUserMessage extends AppCompatActivity {
         if (mChildEventListener != null) {
             mMessagesDatabaseReference.child(UserDetails.usernameID).child(UserDetails.secondUser).child(UserDetails.secondUserID).removeEventListener(mDeliveryChildEventListener);
             mMessagesDatabaseReferenceSecondName.child(UserDetails.secondUserID).child(UserDetails.username).child(UserDetails.usernameID).removeEventListener(mChildEventListener);
+            mMessagesDatabaseReferenceUsernameToUsername.removeEventListener(mShopChildEventListener);
             /*mChildEventListener = null;
             mDeliveryChildEventListener = null;*/
         }
@@ -450,7 +546,7 @@ public class UserToUserMessage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent toMapActivity = new Intent(UserToUserMessage.this,MapsActivity.class);
+        Intent toMapActivity = new Intent(UserToUserMessage.this, MapsActivity.class);
         startActivity(toMapActivity);
     }
 
